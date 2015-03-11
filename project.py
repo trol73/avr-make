@@ -1,25 +1,43 @@
+import os
+
 __author__ = 'trol'
 
+import glob
 
 class Project:
 
     root_path = None
     _glob = {}
     _loc = {}
+    _full_sources_list = set([])
 
     def __init__(self, root_path):
         self.root_path = root_path
 
-
     def load(self, file_name):
+        # load project file
         execfile(self.root_path + '/' + file_name, self._glob, self._loc)
-        print self._loc
+
+        # build sources list
+        src = self._loc['src']
+        for pattern in src:
+            for f in glob.glob(self.root_path + '/' + pattern):
+                if not os.path.isdir(f):
+                    relative = f
+                    if relative.startswith(self.root_path):
+                        relative = relative[len(self.root_path):]
+                    print relative
+                    self._full_sources_list.add(relative)
 
     def get(self, name):
         return self._loc[name]
 
     def get_sources(self, ext):
-        directories = self._loc['src']
-        print 'd = ', directories
-        result = self._loc['src']
+        result = []
+        for f in self._full_sources_list:
+            file_ext = os.path.splitext(f)[1]
+            if file_ext.startswith('.'):
+                file_ext = file_ext[1:]
+            if file_ext == ext:
+                result.append(f)
         return result

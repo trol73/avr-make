@@ -10,7 +10,7 @@ MAKE_FILE_NAME = 'prj.py'
 project_root = os.getcwd()
 
 
-prj = Project(project_root)
+prj = Project(project_root + '/test_project')
 
 prj.load(MAKE_FILE_NAME)
 
