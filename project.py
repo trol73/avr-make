@@ -25,14 +25,17 @@ class Project:
                 if not os.path.isdir(f):
                     relative = f
                     if relative.startswith(self.root_path):
-                        relative = relative[len(self.root_path):]
+                        relative = relative[len(self.root_path)+1:]
                     print relative
                     self._full_sources_list.add(relative)
 
     def get(self, name):
         return self._loc[name]
 
-    def get_sources(self, ext):
+    def get_sources(self):
+        return self._full_sources_list
+
+    def get_sources_with_ext(self, ext):
         result = []
         for f in self._full_sources_list:
             file_ext = os.path.splitext(f)[1]
@@ -41,3 +44,13 @@ class Project:
             if file_ext == ext:
                 result.append(f)
         return result
+
+    def get_name(self):
+        """
+        Get project name
+        :return:
+        """
+        return self.get('name')
+
+    def is_debug(self):
+        return self.get('debug')

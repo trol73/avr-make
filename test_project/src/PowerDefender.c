@@ -1,15 +1,20 @@
 #include "config.h"
 
+//#define __need_size_t
+//typedef long unsigned int size_t;
+
+#include <stddef.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <stdint.h>
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <avr/iom8.h>
 #include <avr/pgmspace.h>
 #include <avr/sleep.h>
 #include <avr/eeprom.h> 
 #include <avr/wdt.h> 
 
-#include <stdbool.h>
-#include <stdint.h>
 #include <util/delay.h>
 
 #include "stddef.h"

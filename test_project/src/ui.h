@@ -71,7 +71,7 @@
 /*
  * Строковые ресурсы
  */
-#define DEFSTR(name, string)			char name[] PROGMEM = string;
+#define DEFSTR(name, string)			const char name[] PROGMEM = string;
 
 
 

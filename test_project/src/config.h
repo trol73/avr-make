@@ -1,6 +1,6 @@
 #define __AVR_ATmega8__						1
 
-#define F_CPU									11059200L		// частота кварца в Гц
+//#define F_CPU									11059200L		// частота кварца в Гц
 
 #define DEBUG									0
 

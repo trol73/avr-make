@@ -1,22 +1,29 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+from compilers.avr import AvrCompiler
 from project import Project
 
 __author__ = 'trol'
 
 MAKE_FILE_NAME = 'prj.py'
 
+os.chdir('test_project')
 project_root = os.getcwd()
 
+print "project:", project_root
 
-prj = Project(project_root + '/test_project')
+prj = Project(project_root)
 
 prj.load(MAKE_FILE_NAME)
 
 print prj.get('name')
 print prj.get('frequency')
-print prj.get_sources('c')
+print prj.get_sources()
+
+compiler = AvrCompiler(prj)
+compiler.init()
+compiler.build()
 
 # avr-gcc -Wall -Os -DF_CPU=16000000 -mmcu=atmega328p -c main.c -o main.o
 # main.c:18:6: warning: return type of 'main' is not 'int' [-Wmain]

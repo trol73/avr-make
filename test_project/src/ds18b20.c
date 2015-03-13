@@ -1,6 +1,6 @@
 #include "ds18b20.h"
 
-#include "1wire.h"
+#include "lib/1wire.h"
 #include "crc8.h"
 
 
