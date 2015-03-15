@@ -8,7 +8,7 @@ __author__ = 'trol'
 
 MAKE_FILE_NAME = 'prj.py'
 
-os.chdir('test_project')
+#os.chdir('test_project')
 project_root = os.getcwd()
 
 print "project:", project_root

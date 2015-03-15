@@ -12,6 +12,7 @@ class AvrCompiler(Compiler):
     path_avr_gcc = None
     path_avr_objcopy = None
     path_avr_objdump = None
+    path_avr_size = None
     path_build = None
 
     compiled_objects_path = []
@@ -35,6 +36,13 @@ class AvrCompiler(Compiler):
         if self.path_avr_objdump is None and utils.is_exe(CROSSPACK_DEFAULT_LOCATION + 'avr-objdump'):
             self.path_avr_objdump = CROSSPACK_DEFAULT_LOCATION + 'avr-objdump'
 
+        # find avr-size
+        self.path_avr_size = utils.which('avr-size')
+        # try CrossPack-AVR default location
+        if self.path_avr_size is None and utils.is_exe(CROSSPACK_DEFAULT_LOCATION + 'avr-size'):
+            self.path_avr_size = CROSSPACK_DEFAULT_LOCATION + 'avr-size'
+
+
         self.path_build = self.project.root_path + '/build'
 
     def build(self):
@@ -47,6 +55,7 @@ class AvrCompiler(Compiler):
         self.make_hex()
         self.make_eep()
         self.make_lst()
+        self.show_size()
 
     def compile(self, source_file_name, ext):
         # prepare build directory
@@ -103,6 +112,10 @@ class AvrCompiler(Compiler):
     def make_lst(self):
         cmd = self.path_avr_objdump + ' -h -S "' + self.get_elf_filepath() + '" > "' + self.get_out_filepath('.lst') + '"'
         utils.remove_file_if_exist(self.get_out_filepath('.lst'))
+        os.system(cmd)
+
+    def show_size(self):
+        cmd = self.path_avr_size + ' --format=avr --mcu=' + self.project.get('mcu') + ' ' + self.get_elf_filepath()
         os.system(cmd)
 
     def get_out_filepath(self, ext):
