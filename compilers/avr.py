@@ -75,7 +75,7 @@ class AvrCompiler(Compiler):
 
         arg_cpu = '-DF_CPU=' + str(self.project.get('frequency')) + ' -mmcu=' + self.project.get('mcu')
         arg_compile = '-Os -g0 -c -std=gnu99'#'-funsigned-char -funsigned-bitfields -O1 -fpack-struct -fshort-enums -g2 -Wall -c -std=gnu99 -MD -MP -MF'
-        cmd = self.path_avr_gcc + ' ' + arg_compile + ' ' + arg_cpu + ' ' + full_src + ' -o ' + full_out + '.o'
+        cmd = self.path_avr_gcc + ' ' + arg_compile + ' ' + arg_cpu + ' ' + self.get_defines_args() + full_src + ' -o ' + full_out + '.o'
 
         os.chdir(os.path.dirname(full_src))
         utils.remove_file_if_exist(full_out + '.o')
@@ -119,6 +119,16 @@ class AvrCompiler(Compiler):
 
     def get_elf_filepath(self):
         return self.get_out_filepath('.elf')
+
+    def get_defines_args(self):
+        defs = self.project.get('defines')
+        if defs is None:
+            return ''
+        result = ''
+        for d in defs:
+            result += '-D' + d + ' '
+        return result
+
 
 
 
