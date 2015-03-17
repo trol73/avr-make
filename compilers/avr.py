@@ -76,13 +76,11 @@ class AvrCompiler(Compiler):
         arg_cpu = '-DF_CPU=' + str(self.project.get('frequency')) + ' -mmcu=' + self.project.get('mcu')
         arg_compile = '-Os -g0 -c -std=gnu99'#'-funsigned-char -funsigned-bitfields -O1 -fpack-struct -fshort-enums -g2 -Wall -c -std=gnu99 -MD -MP -MF'
         cmd = self.path_avr_gcc + ' ' + arg_compile + ' ' + arg_cpu + ' ' + full_src + ' -o ' + full_out + '.o'
-        print cmd
+
         os.chdir(os.path.dirname(full_src))
         utils.remove_file_if_exist(full_out + '.o')
-        rc = os.system(cmd)
+        self.execute(cmd)
         self.compiled_objects_path.append(full_out + '.o')
-        if rc != 0:
-            quit(-1)
 
     def link_project(self, project):
         elf_name = self.path_build + '/' + self.project.get_name() + '.elf'
@@ -91,17 +89,15 @@ class AvrCompiler(Compiler):
             objects += obj + ' '
         arg_mcu = '-mmcu=' + project.get('mcu')
         cmd = self.path_avr_gcc + ' -o ' + elf_name + ' ' + objects + arg_mcu
-        print cmd
         utils.remove_file_if_exist(elf_name)
-        os.system(cmd)
+        self.execute(cmd)
         #avr-gcc.exe" -o MoodLamp.elf  MoodLamp.o   -Wl,-Map="MoodLamp.map" -Wl,-lm   -mmcu=attiny13
 
     def make_hex(self):
         params = '-j .text -j .data -O ihex'
         cmd = self.path_avr_objcopy + ' ' + params + ' ' + self.get_elf_filepath() + ' ' + self.get_out_filepath('.hex')
-        print cmd
         utils.remove_file_if_exist(self.get_out_filepath('.hex'))
-        os.system(cmd)
+        self.execute(cmd)
 
     def make_eep(self):
         params = '-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0  --no-change-warnings'
