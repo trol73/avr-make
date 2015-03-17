@@ -1,8 +1,5 @@
 #include "config.h"
 
-//#define __need_size_t
-//typedef long unsigned int size_t;
-
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -12,8 +9,8 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include <avr/sleep.h>
-#include <avr/eeprom.h> 
-#include <avr/wdt.h> 
+#include <avr/eeprom.h>
+#include <avr/wdt.h>
 
 #include <util/delay.h>
 
@@ -29,12 +26,12 @@
 
 
 void init_time_correction() {
-	// сотые доли секунды надо инкрементировать каждые .. тиков компаратора таймера
-	if ( settings_time_correction_hs != 0 ) {
-	// эта запись почему-то работала некорректно [!]
+	// СЃРѕС‚С‹Рµ РґРѕР»Рё СЃРµРєСѓРЅРґС‹ РЅР°РґРѕ РёРЅРєСЂРµРјРµРЅС‚РёСЂРѕРІР°С‚СЊ РєР°Р¶РґС‹Рµ .. С‚РёРєРѕРІ РєРѕРјРїР°СЂР°С‚РѕСЂР° С‚Р°Р№РјРµСЂР°
+	if (settings_time_correction_hs != 0) {
+	// СЌС‚Р° Р·Р°РїРёСЃСЊ РїРѕС‡РµРјСѓ-С‚Рѕ СЂР°Р±РѕС‚Р°Р»Р° РЅРµРєРѕСЂСЂРµРєС‚РЅРѕ [!]
 //		time_correct_inc_interval = 24*60*60*100;
 //		time_correct_inc_interval /= settings_time_correction_hs;
-	// а вот так работает
+	// Р° РІРѕС‚ С‚Р°Рє СЂР°Р±РѕС‚Р°РµС‚
 		time_correct_inc_interval = 8640000/settings_time_correction_hs;
 	} else {
 		time_correct_inc_interval = 0xffffffff;
@@ -59,13 +56,13 @@ void init_time_correction() {
 
 
 inline void startADC(uint8_t pin);
-// запуск измерения напряжения сети
+// Р·Р°РїСѓСЃРє РёР·РјРµСЂРµРЅРёСЏ РЅР°РїСЂСЏР¶РµРЅРёСЏ СЃРµС‚Рё
 
 
 
 
 
-// прерывание сравнение таймера, вызывается 100 раз в секунду
+// РїСЂРµСЂС‹РІР°РЅРёРµ СЃСЂР°РІРЅРµРЅРёРµ С‚Р°Р№РјРµСЂР°, РІС‹Р·С‹РІР°РµС‚СЃСЏ 100 СЂР°Р· РІ СЃРµРєСѓРЅРґСѓ
 ISR(TIMER1_COMPA_vect) {
 	OCR1A += timer_delta_count;
 
@@ -79,7 +76,7 @@ ISR(TIMER1_COMPA_vect) {
 	} else
 		time_hsec++;
 
-	// периодически опрашиваем клавиатуру
+	// РїРµСЂРёРѕРґРёС‡РµСЃРєРё РѕРїСЂР°С€РёРІР°РµРј РєР»Р°РІРёР°С‚СѓСЂСѓ
 	if ( time_hsec % 7 == 0 ) {
 		keyboard_check_flag = true;
 	}
@@ -96,20 +93,20 @@ ISR(TIMER1_COMPA_vect) {
 				if ( time_hour == 24 ) {
 					time_hour = 0;
 					time_hsec_counter = 0;
-					time_day++; 
-					save_eeprom();		// раз в сутки сохраняем настройки
+					time_day++;
+					save_eeprom();		// СЂР°Р· РІ СЃСѓС‚РєРё СЃРѕС…СЂР°РЅСЏРµРј РЅР°СЃС‚СЂРѕР№РєРё
 				}
-			}			
+			}
 		}
 
 		powerOnTimerTick();
 		accumOnTimerTick();
 //		time = time_hour*60 + time_min;
 
-		// рассчитываем частоту сетевого напряжения		
-		dbs_state = DBS_REQUEST;	// необходимо выставить флаг запрета для компаратора, иначе, первое измерение получается битым
+		// СЂР°СЃСЃС‡РёС‚С‹РІР°РµРј С‡Р°СЃС‚РѕС‚Сѓ СЃРµС‚РµРІРѕРіРѕ РЅР°РїСЂСЏР¶РµРЅРёСЏ
+		dbs_state = DBS_REQUEST;	// РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹СЃС‚Р°РІРёС‚СЊ С„Р»Р°Рі Р·Р°РїСЂРµС‚Р° РґР»СЏ РєРѕРјРїР°СЂР°С‚РѕСЂР°, РёРЅР°С‡Рµ, РїРµСЂРІРѕРµ РёР·РјРµСЂРµРЅРёРµ РїРѕР»СѓС‡Р°РµС‚СЃСЏ Р±РёС‚С‹Рј
 		if ( power_period_cnt != 0 ) {
-			power_frequency = power_period_sum/power_period_cnt;		// средняя длительность полуволны
+			power_frequency = power_period_sum/power_period_cnt;		// СЃСЂРµРґРЅСЏСЏ РґР»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РїРѕР»СѓРІРѕР»РЅС‹
 			power_period_sum = 0;
 			power_period_cnt = 0;
 			power_frequency = 100*F_CPU/8/power_frequency/2;
@@ -119,9 +116,7 @@ ISR(TIMER1_COMPA_vect) {
 			power_frequency = 9999;
 		}
 
-
-
-		// считываем температуру и запускаем измерение снова
+		// СЃС‡РёС‚С‹РІР°РµРј С‚РµРјРїРµСЂР°С‚СѓСЂСѓ Рё Р·Р°РїСѓСЃРєР°РµРј РёР·РјРµСЂРµРЅРёРµ СЃРЅРѕРІР°
 		temperature = DS18B20_read_meas_single();
 		DS18B20_start_single_meas_parasite();
 
@@ -131,9 +126,9 @@ ISR(TIMER1_COMPA_vect) {
 		} else
 			update_statistic();
 
-		// ставим флаг что надо перерисовать экран
+		// СЃС‚Р°РІРёРј С„Р»Р°Рі С‡С‚Рѕ РЅР°РґРѕ РїРµСЂРµСЂРёСЃРѕРІР°С‚СЊ СЌРєСЂР°РЅ
 		lcd_update_flag = true;
-		// если включена поддержка подсветки, прибавляем счетчик
+		// РµСЃР»Рё РІРєР»СЋС‡РµРЅР° РїРѕРґРґРµСЂР¶РєР° РїРѕРґСЃРІРµС‚РєРё, РїСЂРёР±Р°РІР»СЏРµРј СЃС‡РµС‚С‡РёРє
 #if ENABLE_LCD_HIGHLIGHT
 		if ( lcd_highlight_time < ENABLE_LCD_HIGHLIGHT ) {
 			lcd_highlight_time++;
@@ -147,30 +142,30 @@ ISR(TIMER1_COMPA_vect) {
 }
 
 
-// прерывание аналогового компаратора
+// РїСЂРµСЂС‹РІР°РЅРёРµ Р°РЅР°Р»РѕРіРѕРІРѕРіРѕ РєРѕРјРїР°СЂР°С‚РѕСЂР°
 ISR(ANA_COMP_vect) {
-	uint16_t timer_counter;	// значение счетчика таймера
+	uint16_t timer_counter;	// Р·РЅР°С‡РµРЅРёРµ СЃС‡РµС‚С‡РёРєР° С‚Р°Р№РјРµСЂР°
 
 	timer_counter = TCNT1L;
-	timer_counter += TCNT1H << 8;	
+	timer_counter += TCNT1H << 8;
 
 	if ( dbs_state == DBS_READY ) {
 		power_period_sum += timer_counter - power_prev_counter;
 		power_period_cnt++;
 		voltage_meassure_comparator_counter++;
 	} else if ( dbs_state != DBS_REQUEST ) {
-		dbs_state = DBS_READY; 
-	}	
-	
+		dbs_state = DBS_READY;
+	}
+
 	power_prev_counter = timer_counter;
 }
 
 
 #define VOLTAGE_AVERAGE		10
-uint16_t last_voltages[VOLTAGE_AVERAGE];	// тут хранятся последние измеренные напряжения для того, чтобы выводить на экран среднее
+uint16_t last_voltages[VOLTAGE_AVERAGE];	// С‚СѓС‚ С…СЂР°РЅСЏС‚СЃСЏ РїРѕСЃР»РµРґРЅРёРµ РёР·РјРµСЂРµРЅРЅС‹Рµ РЅР°РїСЂСЏР¶РµРЅРёСЏ РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ РІС‹РІРѕРґРёС‚СЊ РЅР° СЌРєСЂР°РЅ СЃСЂРµРґРЅРµРµ
 
 
-// возвращает устредненное по последним 10 измерениям значение напряжения
+// РІРѕР·РІСЂР°С‰Р°РµС‚ СѓСЃС‚СЂРµРґРЅРµРЅРЅРѕРµ РїРѕ РїРѕСЃР»РµРґРЅРёРј 10 РёР·РјРµСЂРµРЅРёСЏРј Р·РЅР°С‡РµРЅРёРµ РЅР°РїСЂСЏР¶РµРЅРёСЏ
 inline uint16_t getAverageVoltage(uint16_t v) {
 	uint16_t sum = v;
 	for ( uint8_t i = VOLTAGE_AVERAGE-1; i >= 1; i-- ) {
@@ -182,7 +177,7 @@ inline uint16_t getAverageVoltage(uint16_t v) {
 }
 
 
-// прерывание АЦП
+// РїСЂРµСЂС‹РІР°РЅРёРµ РђР¦Рџ
 ISR(ADC_vect) {
 	uint8_t admux = ADMUX & 1;//0b00000111;
 	uint16_t v;
@@ -199,13 +194,13 @@ ISR(ADC_vect) {
 
 
 			power_voltage = v;
-			// проверяем напряжение и реагируем, если надо
+			// РїСЂРѕРІРµСЂСЏРµРј РЅР°РїСЂСЏР¶РµРЅРёРµ Рё СЂРµР°РіРёСЂСѓРµРј, РµСЃР»Рё РЅР°РґРѕ
 			powerUpdateState();
 
-			// если схема подключена к сети, обновляем значения напряжения для вывода на экран
-			// иначе будет нулевое значение, которое нам не интересно
+			// РµСЃР»Рё СЃС…РµРјР° РїРѕРґРєР»СЋС‡РµРЅР° Рє СЃРµС‚Рё, РѕР±РЅРѕРІР»СЏРµРј Р·РЅР°С‡РµРЅРёСЏ РЅР°РїСЂСЏР¶РµРЅРёСЏ РґР»СЏ РІС‹РІРѕРґР° РЅР° СЌРєСЂР°РЅ
+			// РёРЅР°С‡Рµ Р±СѓРґРµС‚ РЅСѓР»РµРІРѕРµ Р·РЅР°С‡РµРЅРёРµ, РєРѕС‚РѕСЂРѕРµ РЅР°Рј РЅРµ РёРЅС‚РµСЂРµСЃРЅРѕ
 			if ( power_rele_enabled ) {
-				// для отображение на экране делаем усреднение
+				// РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ РЅР° СЌРєСЂР°РЅРµ РґРµР»Р°РµРј СѓСЃСЂРµРґРЅРµРЅРёРµ
 				power_voltage = getAverageVoltage(power_voltage);
 			} else {
 				power_voltage = power_bad_voltage;
@@ -214,7 +209,7 @@ ISR(ADC_vect) {
 			power_voltage_cnt = 0;
 			power_voltage_sum = 0;
 			if ( voltage_meass_mode != VM_POWER ) {
-				// если надо измерить напряжение под нагрузкой, то включаем ее, иначе - выключим
+				// РµСЃР»Рё РЅР°РґРѕ РёР·РјРµСЂРёС‚СЊ РЅР°РїСЂСЏР¶РµРЅРёРµ РїРѕРґ РЅР°РіСЂСѓР·РєРѕР№, С‚Рѕ РІРєР»СЋС‡Р°РµРј РµРµ, РёРЅР°С‡Рµ - РІС‹РєР»СЋС‡РёРј
 				accumEnableDischarge(voltage_meass_mode == VM_ACCUM_LOAD);
 				startADC(ADC_ACCUM_PIN);
 			} else
@@ -233,8 +228,8 @@ ISR(ADC_vect) {
 			} else if ( voltage_meass_mode == VM_ACCUM_LOAD ) {
 				accum_voltage_load = v;
 			}
-			// если это было измерение без нагрузки, и при этом АКБ в режиме разрядки, включаем нагрузку
-			// если это было измерение под нагрузкой, и при этом АКБ не в режиме разрядки, отключаем нагрузку
+			// РµСЃР»Рё СЌС‚Рѕ Р±С‹Р»Рѕ РёР·РјРµСЂРµРЅРёРµ Р±РµР· РЅР°РіСЂСѓР·РєРё, Рё РїСЂРё СЌС‚РѕРј РђРљР‘ РІ СЂРµР¶РёРјРµ СЂР°Р·СЂСЏРґРєРё, РІРєР»СЋС‡Р°РµРј РЅР°РіСЂСѓР·РєСѓ
+			// РµСЃР»Рё СЌС‚Рѕ Р±С‹Р»Рѕ РёР·РјРµСЂРµРЅРёРµ РїРѕРґ РЅР°РіСЂСѓР·РєРѕР№, Рё РїСЂРё СЌС‚РѕРј РђРљР‘ РЅРµ РІ СЂРµР¶РёРјРµ СЂР°Р·СЂСЏРґРєРё, РѕС‚РєР»СЋС‡Р°РµРј РЅР°РіСЂСѓР·РєСѓ
 			accumEnableDischarge(accum_state == ACB_STATE_DISCHARGE);
 			accum_voltage_sum = 0;
 			accum_voltage_cnt = 0;
@@ -249,7 +244,7 @@ ISR(ADC_vect) {
 
 
 /**
- * Запускает измерение сетевого напряжения
+ * Р—Р°РїСѓСЃРєР°РµС‚ РёР·РјРµСЂРµРЅРёРµ СЃРµС‚РµРІРѕРіРѕ РЅР°РїСЂСЏР¶РµРЅРёСЏ
  */
 inline void startADC(uint8_t pin) {
 	ADMUX = pin|_BV(REFS0)|_BV(REFS1);
@@ -261,12 +256,12 @@ inline void startADC(uint8_t pin) {
 
 
 
-void main(void) {	
+void main(void) {
 	wdt_enable(WDTO_250MS);
-	_delay_ms(50);	
+	_delay_ms(50);
 	wdt_reset();
 	uart_init();
-	
+
 	keyboardInit();
 
 	lcd_init();
@@ -290,21 +285,21 @@ void main(void) {
 	power_voltage_sum = 0;
 	voltage_meassure_comparator_counter = 0;
 
-	lcd_disable_cursor();	
+	lcd_disable_cursor();
 
 	DS18B20_start_single_meas_parasite();
 
-	// иннициализация компаратора
+	// РёРЅРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєРѕРјРїР°СЂР°С‚РѕСЂР°
 	ACSR = 0b00001000;
 
-	timer_delta_count = F_CPU/8/100;	// прерывание будет возникать ровно 100 раз в секунду
+	timer_delta_count = F_CPU/8/100;	// РїСЂРµСЂС‹РІР°РЅРёРµ Р±СѓРґРµС‚ РІРѕР·РЅРёРєР°С‚СЊ СЂРѕРІРЅРѕ 100 СЂР°Р· РІ СЃРµРєСѓРЅРґСѓ
 
-	// конфигурируем T/C1
-	TCCR1A = 0b00000000;	// ШИМ отключен, пины отключены
-	TCCR1B = 0b00000010; // на вход таймера подается TCK/8
+	// РєРѕРЅС„РёРіСѓСЂРёСЂСѓРµРј T/C1
+	TCCR1A = 0b00000000;	// РЁРРњ РѕС‚РєР»СЋС‡РµРЅ, РїРёРЅС‹ РѕС‚РєР»СЋС‡РµРЅС‹
+	TCCR1B = 0b00000010; // РЅР° РІС…РѕРґ С‚Р°Р№РјРµСЂР° РїРѕРґР°РµС‚СЃСЏ TCK/8
 	OCR1A = timer_delta_count;
-	TIMSK = 0x10;			// включить прерывание по совпадению для OCR1A
-	TCNT1H = 0;				// сброс счетчика таймера, именно в этой последовательности
+	TIMSK = 0x10;			// РІРєР»СЋС‡РёС‚СЊ РїСЂРµСЂС‹РІР°РЅРёРµ РїРѕ СЃРѕРІРїР°РґРµРЅРёСЋ РґР»СЏ OCR1A
+	TCNT1H = 0;				// СЃР±СЂРѕСЃ СЃС‡РµС‚С‡РёРєР° С‚Р°Р№РјРµСЂР°, РёРјРµРЅРЅРѕ РІ СЌС‚РѕР№ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё
 	TCNT1L = 0;
 
 	startADC(ADC_POWER_PIN);
@@ -314,18 +309,18 @@ void main(void) {
 
 	ui_init();
 
-	for (;;) {		
+	for (;;) {
 		if ( keyboard_check_flag ) {
 			dbs_state = DBS_REQUEST;
 			wdt_reset();
-			keyboardCheck();			
+			keyboardCheck();
 			dbs_state = DBS_DONE;
 			keyboard_check_flag = 0;
 			keyHandle();
 		}
 		if ( lcd_update_flag ) {
 			dbs_state = DBS_REQUEST;
-			drawLCD();			
+			drawLCD();
 			dbs_state = DBS_DONE;
 			lcd_update_flag = 0;
 		}

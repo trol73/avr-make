@@ -6,20 +6,20 @@ from project import Project
 
 __author__ = 'trol'
 
-MAKE_FILE_NAME = 'prj.py'
+MAKE_FILE_NAME = 'make.builder'
 
 #os.chdir('test_project')
 project_root = os.getcwd()
 
-print "project:", project_root
+#print "project:", project_root
 
 prj = Project(project_root)
 
 prj.load(MAKE_FILE_NAME)
 
-print prj.get('name')
-print prj.get('frequency')
-print prj.get_sources()
+# print prj.get('name')
+# print prj.get('frequency')
+# print prj.get_sources()
 
 compiler = AvrCompiler(prj)
 compiler.init()

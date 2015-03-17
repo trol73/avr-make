@@ -1,31 +1,31 @@
 /*
- Интерфейс
-  1) Инфо 					[показывает текущее время, температуру, напряжение в сети и его частоту]
-  2) Статистика
-    2.1) Напряжение		[показывается максимальное и минимальное напряжение и время когда оно было, можно сбросить]
-	 2.2) Частота			[показывается максимальная и минимальная частоты и время когда оно было, можно сбросить]
-	 2.3) Температура		[показывается максимальная и минимальная температуры и время когда оно было, можно сбросить]
-	 2.4) Аккумулятор		[напряжение на батарее, сколько было зарядок, как давно заряжались, сколько дней	работает, можно сбросить]
-		[U=4.12B Uн=4.02B]
-		[t=123дн n=1234цк]
-  3) Аварии
+ РРЅС‚РµСЂС„РµР№СЃ
+  1) РРЅС„Рѕ 					[РїРѕРєР°Р·С‹РІР°РµС‚ С‚РµРєСѓС‰РµРµ РІСЂРµРјСЏ, С‚РµРјРїРµСЂР°С‚СѓСЂСѓ, РЅР°РїСЂСЏР¶РµРЅРёРµ РІ СЃРµС‚Рё Рё РµРіРѕ С‡Р°СЃС‚РѕС‚Сѓ]
+  2) РЎС‚Р°С‚РёСЃС‚РёРєР°
+    2.1) РќР°РїСЂСЏР¶РµРЅРёРµ		[РїРѕРєР°Р·С‹РІР°РµС‚СЃСЏ РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Рё РјРёРЅРёРјР°Р»СЊРЅРѕРµ РЅР°РїСЂСЏР¶РµРЅРёРµ Рё РІСЂРµРјСЏ РєРѕРіРґР° РѕРЅРѕ Р±С‹Р»Рѕ, РјРѕР¶РЅРѕ СЃР±СЂРѕСЃРёС‚СЊ]
+	 2.2) Р§Р°СЃС‚РѕС‚Р°			[РїРѕРєР°Р·С‹РІР°РµС‚СЃСЏ РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ Рё РјРёРЅРёРјР°Р»СЊРЅР°СЏ С‡Р°СЃС‚РѕС‚С‹ Рё РІСЂРµРјСЏ РєРѕРіРґР° РѕРЅРѕ Р±С‹Р»Рѕ, РјРѕР¶РЅРѕ СЃР±СЂРѕСЃРёС‚СЊ]
+	 2.3) РўРµРјРїРµСЂР°С‚СѓСЂР°		[РїРѕРєР°Р·С‹РІР°РµС‚СЃСЏ РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ Рё РјРёРЅРёРјР°Р»СЊРЅР°СЏ С‚РµРјРїРµСЂР°С‚СѓСЂС‹ Рё РІСЂРµРјСЏ РєРѕРіРґР° РѕРЅРѕ Р±С‹Р»Рѕ, РјРѕР¶РЅРѕ СЃР±СЂРѕСЃРёС‚СЊ]
+	 2.4) РђРєРєСѓРјСѓР»СЏС‚РѕСЂ		[РЅР°РїСЂСЏР¶РµРЅРёРµ РЅР° Р±Р°С‚Р°СЂРµРµ, СЃРєРѕР»СЊРєРѕ Р±С‹Р»Рѕ Р·Р°СЂСЏРґРѕРє, РєР°Рє РґР°РІРЅРѕ Р·Р°СЂСЏР¶Р°Р»РёСЃСЊ, СЃРєРѕР»СЊРєРѕ РґРЅРµР№	СЂР°Р±РѕС‚Р°РµС‚, РјРѕР¶РЅРѕ СЃР±СЂРѕСЃРёС‚СЊ]
+		[U=4.12B UРЅ=4.02B]
+		[t=123РґРЅ n=1234С†Рє]
+  3) РђРІР°СЂРёРё
 	   [10: 12:30->13:20]
-	   [U=260.3B  1000дн]
-  4) Настройки - Время
-      [Время: 12:34:55 ]
-		[Коррекция +12345]
-  5) Настройки - Защита
-  		[Umin = 190.0В   ]		[tповтора =12345с]
-		[Umax = 250.0В   ]		[tконтроля=12345с]
-  6) Настройки - Аккумулятор	     		
-		[Uпор.xx = 4.60В ]		[tзарядки=16час. ]    [АКБ заряжается..]
-		[Uпор = 4.50В   >]		[    зарядить    ]    [13:40      5.11В]
-		
-	
+	   [U=260.3B  1000РґРЅ]
+  4) РќР°СЃС‚СЂРѕР№РєРё - Р’СЂРµРјСЏ
+      [Р’СЂРµРјСЏ: 12:34:55 ]
+		[РљРѕСЂСЂРµРєС†РёСЏ +12345]
+  5) РќР°СЃС‚СЂРѕР№РєРё - Р—Р°С‰РёС‚Р°
+  		[Umin = 190.0Р’   ]		[tРїРѕРІС‚РѕСЂР° =12345СЃ]
+		[Umax = 250.0Р’   ]		[tРєРѕРЅС‚СЂРѕР»СЏ=12345СЃ]
+  6) РќР°СЃС‚СЂРѕР№РєРё - РђРєРєСѓРјСѓР»СЏС‚РѕСЂ
+		[UРїРѕСЂ.xx = 4.60Р’ ]		[tР·Р°СЂСЏРґРєРё=16С‡Р°СЃ. ]    [РђРљР‘ Р·Р°СЂСЏР¶Р°РµС‚СЃСЏ..]
+		[UРїРѕСЂ = 4.50Р’   >]		[    Р·Р°СЂСЏРґРёС‚СЊ    ]    [13:40      5.11Р’]
+
+
 
 */
 
-// Номера экранов
+// РќРѕРјРµСЂР° СЌРєСЂР°РЅРѕРІ
 #define SCREEN_INFO									1
 #define SCREEN_STATISTIC							2
 #define SCREEN_CRASHES								3
@@ -43,7 +43,7 @@
 #define SCREEN_CHARGE_PROCESS						15
 
 
-// Коды клавиш
+// РљРѕРґС‹ РєР»Р°РІРёС€
 #define KEY_ENTER				0
 #define KEY_ESC				1
 #define KEY_UP					2
@@ -52,24 +52,24 @@
 
 
 
-#define CH_GRAD		0x00				// символ градуса
-#define CH_SELECTOR	0x01				// символ выбранного элемента диалога
+#define CH_GRAD		0x00				// СЃРёРјРІРѕР» РіСЂР°РґСѓСЃР°
+#define CH_SELECTOR	0x01				// СЃРёРјРІРѕР» РІС‹Р±СЂР°РЅРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РґРёР°Р»РѕРіР°
 
 
-#define OUT_DONE			8				// на этом коде обработка будет завершена
-#define OUT_CMD			9				// следующий байт будет выполнен как команда для LCD (используется для переходов goto)
-#define OUT_FREQUENCY	10				// следующий байт - индекс переменой в массиве data_16[], выводит частоту		
-#define OUT_VOLTAGE		11				// следующий байт - индекс переменой в массиве data_16[], выводит напряжение
-#define OUT_TEMPER		12				// следующий байт - индекс переменой в массиве data_16[], выводит температуру
-#define OUT_SHORTTIME	13				// следующий байт - индекс переменой в массиве data_16[], выводит сокращенное время
-#define OUT_TIME			14				// выводит текущее время
-#define OUT_WORD			15				// следующий байт - индекс переменой в массиве data_16[], выводит 2х-байтовую переменную
-#define OUT_VOLTAGE_2	16				// следующий байт - индекс переменой в массиве data_16[], выводит напряжение АКБ
-#define OUT_DAY			17				// следующий байт - день недели и его надо вычесть из текущего дня
+#define OUT_DONE			8				// РЅР° СЌС‚РѕРј РєРѕРґРµ РѕР±СЂР°Р±РѕС‚РєР° Р±СѓРґРµС‚ Р·Р°РІРµСЂС€РµРЅР°
+#define OUT_CMD			9				// СЃР»РµРґСѓСЋС‰РёР№ Р±Р°Р№С‚ Р±СѓРґРµС‚ РІС‹РїРѕР»РЅРµРЅ РєР°Рє РєРѕРјР°РЅРґР° РґР»СЏ LCD (РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РїРµСЂРµС…РѕРґРѕРІ goto)
+#define OUT_FREQUENCY	10				// СЃР»РµРґСѓСЋС‰РёР№ Р±Р°Р№С‚ - РёРЅРґРµРєСЃ РїРµСЂРµРјРµРЅРѕР№ РІ РјР°СЃСЃРёРІРµ data_16[], РІС‹РІРѕРґРёС‚ С‡Р°СЃС‚РѕС‚Сѓ
+#define OUT_VOLTAGE		11				// СЃР»РµРґСѓСЋС‰РёР№ Р±Р°Р№С‚ - РёРЅРґРµРєСЃ РїРµСЂРµРјРµРЅРѕР№ РІ РјР°СЃСЃРёРІРµ data_16[], РІС‹РІРѕРґРёС‚ РЅР°РїСЂСЏР¶РµРЅРёРµ
+#define OUT_TEMPER		12				// СЃР»РµРґСѓСЋС‰РёР№ Р±Р°Р№С‚ - РёРЅРґРµРєСЃ РїРµСЂРµРјРµРЅРѕР№ РІ РјР°СЃСЃРёРІРµ data_16[], РІС‹РІРѕРґРёС‚ С‚РµРјРїРµСЂР°С‚СѓСЂСѓ
+#define OUT_SHORTTIME	13				// СЃР»РµРґСѓСЋС‰РёР№ Р±Р°Р№С‚ - РёРЅРґРµРєСЃ РїРµСЂРµРјРµРЅРѕР№ РІ РјР°СЃСЃРёРІРµ data_16[], РІС‹РІРѕРґРёС‚ СЃРѕРєСЂР°С‰РµРЅРЅРѕРµ РІСЂРµРјСЏ
+#define OUT_TIME			14				// РІС‹РІРѕРґРёС‚ С‚РµРєСѓС‰РµРµ РІСЂРµРјСЏ
+#define OUT_WORD			15				// СЃР»РµРґСѓСЋС‰РёР№ Р±Р°Р№С‚ - РёРЅРґРµРєСЃ РїРµСЂРµРјРµРЅРѕР№ РІ РјР°СЃСЃРёРІРµ data_16[], РІС‹РІРѕРґРёС‚ 2С…-Р±Р°Р№С‚РѕРІСѓСЋ РїРµСЂРµРјРµРЅРЅСѓСЋ
+#define OUT_VOLTAGE_2	16				// СЃР»РµРґСѓСЋС‰РёР№ Р±Р°Р№С‚ - РёРЅРґРµРєСЃ РїРµСЂРµРјРµРЅРѕР№ РІ РјР°СЃСЃРёРІРµ data_16[], РІС‹РІРѕРґРёС‚ РЅР°РїСЂСЏР¶РµРЅРёРµ РђРљР‘
+#define OUT_DAY			17				// СЃР»РµРґСѓСЋС‰РёР№ Р±Р°Р№С‚ - РґРµРЅСЊ РЅРµРґРµР»Рё Рё РµРіРѕ РЅР°РґРѕ РІС‹С‡РµСЃС‚СЊ РёР· С‚РµРєСѓС‰РµРіРѕ РґРЅСЏ
 
 
 /*
- * Строковые ресурсы
+ * РЎС‚СЂРѕРєРѕРІС‹Рµ СЂРµСЃСѓСЂСЃС‹
  */
 #define DEFSTR(name, string)			const char name[] PROGMEM = string;
 
@@ -81,15 +81,15 @@
 //DEFSTR(str_yes, "Yes");
 //DEFSTR(str_no, "No");
 
-DEFSTR(str_clear_statistic, "\x4F\xC0\xB8\x63\xBF\xB8\xBF\xC4\x20\xE3\x61\xBD\xBD\xC3\x65?");	// Очистить данные?
-DEFSTR(str_charge_acb,      "  \xA4\x61\x70\xC7\xE3\xB8\xBF\xC4\x20\x41\x4B\xA0?");					// Начать зарядку?
-DEFSTR(str_save_all, " \x43\x6F\x78\x70\x61\xBD\xB8\xBF\xC4\x20\xB3\x63\x65?");						// Сохранить все?
+DEFSTR(str_clear_statistic, "\x4F\xC0\xB8\x63\xBF\xB8\xBF\xC4\x20\xE3\x61\xBD\xBD\xC3\x65?");	// РћС‡РёСЃС‚РёС‚СЊ РґР°РЅРЅС‹Рµ?
+DEFSTR(str_charge_acb,      "  \xA4\x61\x70\xC7\xE3\xB8\xBF\xC4\x20\x41\x4B\xA0?");					// РќР°С‡Р°С‚СЊ Р·Р°СЂСЏРґРєСѓ?
+DEFSTR(str_save_all, " \x43\x6F\x78\x70\x61\xBD\xB8\xBF\xC4\x20\xB3\x63\x65?");						// РЎРѕС…СЂР°РЅРёС‚СЊ РІСЃРµ?
 DEFSTR(str_yes, "\xE0\x61");
 DEFSTR(str_no, "\x48\x65\xBF");
-DEFSTR(str_crash, "\x41\x42\x41\x50\xA5\xB1\x21");				// АВАРИЯ!
+DEFSTR(str_crash, "\x41\x42\x41\x50\xA5\xB1\x21");				// РђР’РђР РРЇ!
 
 
-// позиция курсора 
+// РїРѕР·РёС†РёСЏ РєСѓСЂСЃРѕСЂР°
 PROGMEM const uint8_t ui_time_settings_cursor[5] = {
 	HD44780_DDADDR(7),
 	HD44780_DDADDR(10),
@@ -104,9 +104,9 @@ PROGMEM const uint8_t ui_accumulator_settings_cursor[3] = {
 	HD44780_DDADDR(80-16+15)
 };
 */
-// Знакогенератор. Символы градуса и стрелки вправо
+// Р—РЅР°РєРѕРіРµРЅРµСЂР°С‚РѕСЂ. РЎРёРјРІРѕР»С‹ РіСЂР°РґСѓСЃР° Рё СЃС‚СЂРµР»РєРё РІРїСЂР°РІРѕ
 PROGMEM const uint8_t lcd_user_symbols_code[8*2] = {
-// символ градуса
+// СЃРёРјРІРѕР» РіСЂР°РґСѓСЃР°
 	0b00001100,
 	0b00010010,
 	0b00010010,
@@ -115,7 +115,7 @@ PROGMEM const uint8_t lcd_user_symbols_code[8*2] = {
 	0b00000000,
 	0b00000000,
 	0b00000000,
-// символ стрелки вправо
+// СЃРёРјРІРѕР» СЃС‚СЂРµР»РєРё РІРїСЂР°РІРѕ
 	0b00010000,
 	0b00011000,
 	0b00011100,
@@ -132,7 +132,7 @@ PROGMEM const uint8_t lcd_user_symbols_code[8*2] = {
 PROGMEM const uint8_t ui_screens_data[] = {
 	OUT_DONE,
 
-// Главный экран
+// Р“Р»Р°РІРЅС‹Р№ СЌРєСЂР°РЅ
 	OUT_TIME,
 	OUT_CMD, 			HD44780_DDADDR(10),
 	OUT_TEMPER,			VI16_TEMPERATURE,
@@ -142,7 +142,7 @@ PROGMEM const uint8_t ui_screens_data[] = {
 	OUT_VOLTAGE,		VI16_POWER_VOLTAGE,
 	OUT_DONE,
 
-// Экран меню "Настройка время"
+// Р­РєСЂР°РЅ РјРµРЅСЋ "РќР°СЃС‚СЂРѕР№РєР° РІСЂРµРјСЏ"
 //	'S', 'e', 't', 't', 'i', 'n', 'g', 's',
 	0x48, 0x61, 0x63, 0xBF, 0x70, 0x6F, 0xB9, 0xBA, 0xB8,
 	OUT_CMD,				HD44780_DDADDR(80-16+0),
@@ -150,15 +150,15 @@ PROGMEM const uint8_t ui_screens_data[] = {
 	0x42, 0x70, 0x65, 0xBC, 0xC7,
 	OUT_DONE,
 
-// Экран меню "Настройка защита"
+// Р­РєСЂР°РЅ РјРµРЅСЋ "РќР°СЃС‚СЂРѕР№РєР° Р·Р°С‰РёС‚Р°"
 //	'S', 'e', 't', 't', 'i', 'n', 'g', 's',
 	0x48, 0x61, 0x63, 0xBF, 0x70, 0x6F, 0xB9, 0xBA, 0xB8,
 	OUT_CMD,				HD44780_DDADDR(80-16+0),
 //	'P', 'r', 'o', 't', 'e', 'c', 't', 'i', 'o', 'n',
-	0xA4, 0x61, 0xE6, 0xB8, 0xBF, 0x61, 
+	0xA4, 0x61, 0xE6, 0xB8, 0xBF, 0x61,
 	OUT_DONE,
 
-// Экран меню "Настройка Аккумулятор"
+// Р­РєСЂР°РЅ РјРµРЅСЋ "РќР°СЃС‚СЂРѕР№РєР° РђРєРєСѓРјСѓР»СЏС‚РѕСЂ"
 //	'S', 'e', 't', 't', 'i', 'n', 'g', 's',
 	0x48, 0x61, 0x63, 0xBF, 0x70, 0x6F, 0xB9, 0xBA, 0xB8,
 	OUT_CMD,				HD44780_DDADDR(80-16+0),
@@ -166,12 +166,12 @@ PROGMEM const uint8_t ui_screens_data[] = {
 	0x41, 0xBA, 0xBA, 0x79, 0xBC, 0x79, 0xBB, 0xC7, 0xBF, 0x6F, 0x70,
 	OUT_DONE,
 
-// Экран меню "Статистика"
+// Р­РєСЂР°РЅ РјРµРЅСЋ "РЎС‚Р°С‚РёСЃС‚РёРєР°"
 //	'S', 't', 'a', 't', 'i', 's', 't', 'i', 'c',
    0x43, 0xBF, 0x61, 0xBF, 0xB8, 0x63, 0xBF, 0xB8, 0xBA, 0x61,
 	OUT_DONE,
 
-// Экран "Статистика напряжения"
+// Р­РєСЂР°РЅ "РЎС‚Р°С‚РёСЃС‚РёРєР° РЅР°РїСЂСЏР¶РµРЅРёСЏ"
 	OUT_VOLTAGE,		VI16_STAT_MIN_VOLTAGE,
 	OUT_CMD, 			HD44780_DDADDR(10),
 	OUT_VOLTAGE,		VI16_STAT_MAX_VOLTAGE,
@@ -181,7 +181,7 @@ PROGMEM const uint8_t ui_screens_data[] = {
 	OUT_SHORTTIME, 	VI16_STAT_MAX_VOLTAGE_TIME,
 	OUT_DONE,
 
-// Экран "Статистика частоты"
+// Р­РєСЂР°РЅ "РЎС‚Р°С‚РёСЃС‚РёРєР° С‡Р°СЃС‚РѕС‚С‹"
 	OUT_FREQUENCY,		VI16_STAT_MIN_FREQUENCY,
 	OUT_CMD, 			HD44780_DDADDR(9),
 	OUT_FREQUENCY,		VI16_STAT_MAX_FREQUENCY,
@@ -191,7 +191,7 @@ PROGMEM const uint8_t ui_screens_data[] = {
 	OUT_SHORTTIME, 	VI16_STAT_MAX_FREQUENCY_TIME,
 	OUT_DONE,
 
-// Экран "Статистика температуры"
+// Р­РєСЂР°РЅ "РЎС‚Р°С‚РёСЃС‚РёРєР° С‚РµРјРїРµСЂР°С‚СѓСЂС‹"
 	OUT_TEMPER,			VI16_STAT_MIN_TEMPERATURE,
 	OUT_CMD, 			HD44780_DDADDR(10),
 	OUT_TEMPER,			VI16_STAT_MAX_TEMPERATURE,
@@ -201,7 +201,7 @@ PROGMEM const uint8_t ui_screens_data[] = {
 	OUT_SHORTTIME, 	VI16_STAT_MAX_TEMPERATURE_TIME,
 	OUT_DONE,
 
-// Экран "Статистика аккумулятор"
+// Р­РєСЂР°РЅ "РЎС‚Р°С‚РёСЃС‚РёРєР° Р°РєРєСѓРјСѓР»СЏС‚РѕСЂ"
 	'U', '=',
 	OUT_VOLTAGE_2, 	VI16_ACCUM_VOLTAGE,
 	' ',
@@ -210,74 +210,74 @@ PROGMEM const uint8_t ui_screens_data[] = {
 	OUT_CMD,				HD44780_DDADDR(80-16+0),
 	't', '=',
 	OUT_DAY,				VI16_STAT_ACCUM_CHARGE_DAYS,
- 	0xE3, 0xBD,		// дн
+ 	0xE3, 0xBD,		// РґРЅ
 	' ', 'n', '=',
 	OUT_WORD,			VI16_STAT_ACCUM_CYCLES,
-	0xE5, 0xBA, 		// цк
+	0xE5, 0xBA, 		// С†Рє
 	OUT_DONE,
 
-// Экран "Настройка времени"
-	0x42, 0x70, 0x65, 0xBC, 0xC7, ':',		// Время:
+// Р­РєСЂР°РЅ "РќР°СЃС‚СЂРѕР№РєР° РІСЂРµРјРµРЅРё"
+	0x42, 0x70, 0x65, 0xBC, 0xC7, ':',		// Р’СЂРµРјСЏ:
 	OUT_CMD,				HD44780_DDADDR(7),
 	OUT_TIME,
 	OUT_CMD,				HD44780_DDADDR(80-16+0),
-	0x4B, 0x6F, 0x70, 0x70, 0x65, 0xBA, 0xE5, 0xB8, 0xC7, ' ', ' ',	// Коррекция
+	0x4B, 0x6F, 0x70, 0x70, 0x65, 0xBA, 0xE5, 0xB8, 0xC7, ' ', ' ',	// РљРѕСЂСЂРµРєС†РёСЏ
 	OUT_WORD,			VI16_SETTINGS_TIME_CORRECTION_HS,
 	OUT_CMD,				HD44780_DDADDR(80-16+10),
 	OUT_DONE,
 
-// Экран "Настройки защиты", первая часть
+// Р­РєСЂР°РЅ "РќР°СЃС‚СЂРѕР№РєРё Р·Р°С‰РёС‚С‹", РїРµСЂРІР°СЏ С‡Р°СЃС‚СЊ
 //	'U', 'm', 'i', 'n', ' ', '=', ' ',
 	'U', 0xBC, 0xB8, 0xBD, ' ', ' ', '=', ' ',
 	OUT_VOLTAGE,		VI16_UI_SETTINGS_U_MIN,
 	OUT_CMD,				HD44780_DDADDR(80-16+0),
 //	'U', 'm', 'a', 'x', ' ', '=', ' ',
-	'U', 0xBC, 0x61, 0xBA, 0x63, ' ', '=', ' ',	
+	'U', 0xBC, 0x61, 0xBA, 0x63, ' ', '=', ' ',
 	OUT_VOLTAGE,		VI16_UI_SETTINGS_U_MAX,
 	OUT_DONE,
 
-// Экран "Настройки защиты", вторая часть
+// Р­РєСЂР°РЅ "РќР°СЃС‚СЂРѕР№РєРё Р·Р°С‰РёС‚С‹", РІС‚РѕСЂР°СЏ С‡Р°СЃС‚СЊ
 //	't', ' ', 'r', 'e', 'p', '	e', 'a', 't', ' ', '=',
-	't', ' ', 0xBE, 0x6F, 0xB3, 0xBF, 0x6F, 0x70, ' ', '=', ' ',	// t повтор =
+	't', ' ', 0xBE, 0x6F, 0xB3, 0xBF, 0x6F, 0x70, ' ', '=', ' ',	// t РїРѕРІС‚РѕСЂ =
 	OUT_WORD, VI16_SETTINGS_PROTECT_REPEAT_TIME,
-	'c', 
+	'c',
 	OUT_CMD,				HD44780_DDADDR(80-16+0),
 	//'t', ' ', 'v', 'e', 'r', 'i', 'f', 'y', ' ', '=',
-	't', ' ', 0xBA, 0x6F, 0xBD, 0xBF, 0x70, 0x2E, ' ', '=', ' ',	// t контр =
+	't', ' ', 0xBA, 0x6F, 0xBD, 0xBF, 0x70, 0x2E, ' ', '=', ' ',	// t РєРѕРЅС‚СЂ =
 	OUT_WORD, VI16_SETTINGS_PROTECT_MEASS_TIME,
 	'c',
 	OUT_DONE,
 
-// Экран "Настрйки аккумулятора" - 1
-	'U', 0xBE, 0x6F, 0x70, '.', 'x', 'x', ' ', '=', ' ',					// Uпор
+// Р­РєСЂР°РЅ "РќР°СЃС‚СЂР№РєРё Р°РєРєСѓРјСѓР»СЏС‚РѕСЂР°" - 1
+	'U', 0xBE, 0x6F, 0x70, '.', 'x', 'x', ' ', '=', ' ',					// UРїРѕСЂ
 	OUT_VOLTAGE_2,		VI16_SETTINGS_ACCUM_MIN_U,
 	OUT_CMD,				HD44780_DDADDR(80-16+0),
-	'U', 0xBE, 0x6F, 0x70, '.', 0xBD, 0xB4, ' ', '=', ' ',			// Uпор.нг
+	'U', 0xBE, 0x6F, 0x70, '.', 0xBD, 0xB4, ' ', '=', ' ',			// UРїРѕСЂ.РЅРі
 	OUT_VOLTAGE_2,		VI16_SETTINGS_ACCUM_MIN_U_LOAD,
 //	OUT_CMD,				HD44780_DDADDR(80-16+15),
 //	CH_SELECTOR,
 	OUT_DONE,
 
 
-// Экран "Настрйки аккумулятора" - 2
- 	't', ' ', 0xB7, 0x61, 0x70, 0xC7, 0xE3, 0xBA, 0xB8, ' ', '=', ' ',		// t зарядки
+// Р­РєСЂР°РЅ "РќР°СЃС‚СЂР№РєРё Р°РєРєСѓРјСѓР»СЏС‚РѕСЂР°" - 2
+ 	't', ' ', 0xB7, 0x61, 0x70, 0xC7, 0xE3, 0xBA, 0xB8, ' ', '=', ' ',		// t Р·Р°СЂСЏРґРєРё
 	OUT_WORD, 			VI_16_ACCUM_CHARGE_TIME,
 	0xC0, '.',
 	OUT_CMD,				HD44780_DDADDR(80-16+3),
-	'[', 0xB7, 0x61, 0x70, 0xC7, 0xE3, 0xB8, 0xBF, 0xC4, ']', // зарядить
+	'[', 0xB7, 0x61, 0x70, 0xC7, 0xE3, 0xB8, 0xBF, 0xC4, ']', // Р·Р°СЂСЏРґРёС‚СЊ
 	OUT_DONE,
 
 
-// Экран "Аварии"
+// Р­РєСЂР°РЅ "РђРІР°СЂРёРё"
 //	'C', 'r', 'a', 's', 'h', 'e', 's',
-	0x41, 0xB3, 0x61, 0x70, 0xB8, 0xB8, 		// Аварии
+	0x41, 0xB3, 0x61, 0x70, 0xB8, 0xB8, 		// РђРІР°СЂРёРё
 	OUT_CMD,				HD44780_DDADDR(80-16+0),
 	'[', ' ',
 	OUT_WORD, 			VI_16_STAT_CRASHES_COUNT,
 	' ', ']',
 	OUT_DONE,
 
-// Экран статистики аварии
+// Р­РєСЂР°РЅ СЃС‚Р°С‚РёСЃС‚РёРєРё Р°РІР°СЂРёРё
 	':', ' ',
 	OUT_SHORTTIME, 	VI_16_STAT_CRASH_T_BEGIN_1,
 	'-', '>',
@@ -287,11 +287,11 @@ PROGMEM const uint8_t ui_screens_data[] = {
 	OUT_VOLTAGE,		VI_16_STAT_CRASH_U_1,
 	' ', ' ',
 	OUT_DAY, 			VI_16_STAT_CRASH_DAY_1,
-	0xE3, 0xBD,		// дн
+	0xE3, 0xBD,		// РґРЅ
 	OUT_DONE,
 
-// Экран процесса зарядки аккумулятора
-	0xA4, 0x61, 0x70, 0xC7, 0xE3, 0xBA, 0x61,		// Зарядка
+// Р­РєСЂР°РЅ РїСЂРѕС†РµСЃСЃР° Р·Р°СЂСЏРґРєРё Р°РєРєСѓРјСѓР»СЏС‚РѕСЂР°
+	0xA4, 0x61, 0x70, 0xC7, 0xE3, 0xBA, 0x61,		// Р—Р°СЂСЏРґРєР°
 	OUT_CMD,				HD44780_DDADDR(80-16+0),
 	OUT_SHORTTIME, 	VI16_ACCUM_CHARGE_MIN,
 	OUT_CMD,				HD44780_DDADDR(80-16+11),
@@ -301,7 +301,7 @@ PROGMEM const uint8_t ui_screens_data[] = {
 };
 
 
-// размеры данных экрана
+// СЂР°Р·РјРµСЂС‹ РґР°РЅРЅС‹С… СЌРєСЂР°РЅР°
 #define UI_DATA_SIZE_SCREEN_MAIN										14
 #define UI_DATA_SIZE_SCREEN_SETTINGS_TIME							17
 #define UI_DATA_SIZE_SCREEN_SETTINGS_PROTECTION					18
@@ -321,7 +321,7 @@ PROGMEM const uint8_t ui_screens_data[] = {
 #define UI_DATA_SIZE_SCREEN_CHARGE_PROCESS						18
 
 
-// смещения экранов в массиве
+// СЃРјРµС‰РµРЅРёСЏ СЌРєСЂР°РЅРѕРІ РІ РјР°СЃСЃРёРІРµ
 #define UI_DATA_OFFSET_SCREEN_MAIN									1
 #define UI_DATA_OFFSET_SCREEN_SETTINGS_TIME						(UI_DATA_OFFSET_SCREEN_MAIN+UI_DATA_SIZE_SCREEN_MAIN)
 #define UI_DATA_OFFSET_SCREEN_SETTINGS_PROTECTION				(UI_DATA_OFFSET_SCREEN_SETTINGS_TIME+UI_DATA_SIZE_SCREEN_SETTINGS_TIME)
@@ -332,13 +332,13 @@ PROGMEM const uint8_t ui_screens_data[] = {
 #define UI_DATA_OFFSET_SCREEN_STATISTIC_TEMPERATURE			(UI_DATA_OFFSET_SCREEN_STATISTIC_FREQUENCY+UI_DATA_SIZE_SCREEN_STATISTIC_FREQUENCY)
 #define UI_DATA_OFFSET_SCREEN_STATISTIC_ACCUMULATOR			(UI_DATA_OFFSET_SCREEN_STATISTIC_TEMPERATURE+UI_DATA_SIZE_SCREEN_STATISTIC_TEMPERATURE)
 #define UI_DATA_OFFSET_SCREEN_SETTINGS_TIME_PARAMS				(UI_DATA_OFFSET_SCREEN_STATISTIC_ACCUMULATOR+UI_DATA_SIZE_SCREEN_STATISTIC_ACCUMULATOR)
-#define UI_DATA_OFFSET_SCREEN_SETTINGS_PROTECTION_PARAMS_1	(UI_DATA_OFFSET_SCREEN_SETTINGS_TIME_PARAMS+UI_DATA_SIZE_SCREEN_SETTINGS_TIME_PARAMS)	
+#define UI_DATA_OFFSET_SCREEN_SETTINGS_PROTECTION_PARAMS_1	(UI_DATA_OFFSET_SCREEN_SETTINGS_TIME_PARAMS+UI_DATA_SIZE_SCREEN_SETTINGS_TIME_PARAMS)
 #define UI_DATA_OFFSET_SCREEN_SETTINGS_PROTECTION_PARAMS_2	(UI_DATA_OFFSET_SCREEN_SETTINGS_PROTECTION_PARAMS_1+UI_DATA_SIZE_SCREEN_SETTINGS_PROTECTION_PARAMS_1)
-#define UI_DATA_OFFSET_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_1	(UI_DATA_OFFSET_SCREEN_SETTINGS_PROTECTION_PARAMS_2+UI_DATA_SIZE_SCREEN_SETTINGS_PROTECTION_PARAMS_2)	
-#define UI_DATA_OFFSET_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_2	(UI_DATA_OFFSET_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_1+UI_DATA_SIZE_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_1)	
-#define UI_DATA_OFFSET_SCREEN_CRASHES								(UI_DATA_OFFSET_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_2+UI_DATA_SIZE_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_2)	
-#define UI_DATA_OFFSET_SCREEN_CRASHES_HISTORY					(UI_DATA_OFFSET_SCREEN_CRASHES+UI_DATA_SIZE_SCREEN_CRASHES)	
-#define UI_DATA_OFFSET_SCREEN_CHARGE_PROCESS						(UI_DATA_OFFSET_SCREEN_CRASHES_HISTORY+UI_DATA_SIZE_SCREEN_CRASHES_HISTORY)	
+#define UI_DATA_OFFSET_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_1	(UI_DATA_OFFSET_SCREEN_SETTINGS_PROTECTION_PARAMS_2+UI_DATA_SIZE_SCREEN_SETTINGS_PROTECTION_PARAMS_2)
+#define UI_DATA_OFFSET_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_2	(UI_DATA_OFFSET_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_1+UI_DATA_SIZE_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_1)
+#define UI_DATA_OFFSET_SCREEN_CRASHES								(UI_DATA_OFFSET_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_2+UI_DATA_SIZE_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_2)
+#define UI_DATA_OFFSET_SCREEN_CRASHES_HISTORY					(UI_DATA_OFFSET_SCREEN_CRASHES+UI_DATA_SIZE_SCREEN_CRASHES)
+#define UI_DATA_OFFSET_SCREEN_CHARGE_PROCESS						(UI_DATA_OFFSET_SCREEN_CRASHES_HISTORY+UI_DATA_SIZE_SCREEN_CRASHES_HISTORY)
 
 /*
 PROGMEM const uint16_t ui_screens_offsets[] = {
@@ -348,7 +348,7 @@ PROGMEM const uint16_t ui_screens_offsets[] = {
 	UI_DATA_OFFSET_SETTINGS_TIME,						// SCREEN_SETTINGS_TIME
 	UI_DATA_OFFSET_SCREEN_SETTINGS_PROTECTION,	// SCREEN_SETTINGS_PROTECTION
 	UI_DATA_OFFSET_SCREEN_STATISTIC_VOLTAGE,		// SCREEN_STATISTIC_VOLTAGE
-	UI_DATA_OFFSET_SCREEN_STATISTIC_FREQUENCY,	// SCREEN_STATISTIC_FREQUENCY					
+	UI_DATA_OFFSET_SCREEN_STATISTIC_FREQUENCY,	// SCREEN_STATISTIC_FREQUENCY
 	UI_DATA_OFFSET_SCREEN_STATISTIC_TEMPERATURE,	// SCREEN_STATISTIC_TEMPERATURE
 	0, 														// SCREEN_STATISTIC_ACCUMULATOR
 	0, 														// SCREEN_STATISTIC_CRASHES
@@ -369,18 +369,18 @@ PROGMEM const uint16_t ui_screens_offsets[] = {
 #define MSG_BOX_SAVE_ALL				3
 
 /**
- * Данные UI
+ * Р”Р°РЅРЅС‹Рµ UI
  */
-uint8_t screen;								// номер текущего экрана
-uint8_t ui_show_yes_no_dialog_flag;		// если не ноль, то содержит код текущего диалога вопроса да/нет (MSG_BOX_xxx)
-bool ui_yes_no_dialog_result;				// результат диалога вопроса "Да/Нет" true - Да, false - Нет
-uint8_t ui_settings_cursor;				// для экранов настроек тут будет номер вводимого параметра
-uint8_t ui_crash_index;						// индекс аварии при просмотре
-uint8_t print_data_offset;					// смещение в области данных для функции print()
-bool ui_is_first_enter_click;				// используется для корректной обработки ситуации удержания ENTER в главном меню
+uint8_t screen;								// РЅРѕРјРµСЂ С‚РµРєСѓС‰РµРіРѕ СЌРєСЂР°РЅР°
+uint8_t ui_show_yes_no_dialog_flag;		// РµСЃР»Рё РЅРµ РЅРѕР»СЊ, С‚Рѕ СЃРѕРґРµСЂР¶РёС‚ РєРѕРґ С‚РµРєСѓС‰РµРіРѕ РґРёР°Р»РѕРіР° РІРѕРїСЂРѕСЃР° РґР°/РЅРµС‚ (MSG_BOX_xxx)
+bool ui_yes_no_dialog_result;				// СЂРµР·СѓР»СЊС‚Р°С‚ РґРёР°Р»РѕРіР° РІРѕРїСЂРѕСЃР° "Р”Р°/РќРµС‚" true - Р”Р°, false - РќРµС‚
+uint8_t ui_settings_cursor;				// РґР»СЏ СЌРєСЂР°РЅРѕРІ РЅР°СЃС‚СЂРѕРµРє С‚СѓС‚ Р±СѓРґРµС‚ РЅРѕРјРµСЂ РІРІРѕРґРёРјРѕРіРѕ РїР°СЂР°РјРµС‚СЂР°
+uint8_t ui_crash_index;						// РёРЅРґРµРєСЃ Р°РІР°СЂРёРё РїСЂРё РїСЂРѕСЃРјРѕС‚СЂРµ
+uint8_t print_data_offset;					// СЃРјРµС‰РµРЅРёРµ РІ РѕР±Р»Р°СЃС‚Рё РґР°РЅРЅС‹С… РґР»СЏ С„СѓРЅРєС†РёРё print()
+bool ui_is_first_enter_click;				// РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕР№ РѕР±СЂР°Р±РѕС‚РєРё СЃРёС‚СѓР°С†РёРё СѓРґРµСЂР¶Р°РЅРёСЏ ENTER РІ РіР»Р°РІРЅРѕРј РјРµРЅСЋ
 
 #if ENABLE_LCD_HIGHLIGHT
-uint8_t lcd_highlight_time;				// счетчик секунд, прошедших с момента последнего нажатия на клавишу, для управлением подсветкой
+uint8_t lcd_highlight_time;				// СЃС‡РµС‚С‡РёРє СЃРµРєСѓРЅРґ, РїСЂРѕС€РµРґС€РёС… СЃ РјРѕРјРµРЅС‚Р° РїРѕСЃР»РµРґРЅРµРіРѕ РЅР°Р¶Р°С‚РёСЏ РЅР° РєР»Р°РІРёС€Сѓ, РґР»СЏ СѓРїСЂР°РІР»РµРЅРёРµРј РїРѕРґСЃРІРµС‚РєРѕР№
 #endif
 
 
@@ -388,18 +388,18 @@ uint8_t lcd_highlight_time;				// счетчик секунд, прошедших с момента последнего
 
 
 /**
- * Первоначальная иннициализация модуля пользовательского интерфейса
+ * РџРµСЂРІРѕРЅР°С‡Р°Р»СЊРЅР°СЏ РёРЅРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјРѕРґСѓР»СЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРіРѕ РёРЅС‚РµСЂС„РµР№СЃР°
  */
 inline void ui_init() {
 #if ENABLE_LCD_HIGHLIGHT
-	// настраиваем порт подсветки
+	// РЅР°СЃС‚СЂР°РёРІР°РµРј РїРѕСЂС‚ РїРѕРґСЃРІРµС‚РєРё
 	DDR(LCD_HIGHLIGHT_PORT) |= _BV(LCD_HIGHLIGHT_PIN);
-	// включаем подсветку
+	// РІРєР»СЋС‡Р°РµРј РїРѕРґСЃРІРµС‚РєСѓ
 	PORT(LCD_HIGHLIGHT_PORT) |= _BV(LCD_HIGHLIGHT_PIN);
 #endif
 	ui_show_yes_no_dialog_flag = MSG_BOX_NONE;
 	screen = SCREEN_INFO;
-	// программируем знакогенератор
+	// РїСЂРѕРіСЂР°РјРјРёСЂСѓРµРј Р·РЅР°РєРѕРіРµРЅРµСЂР°С‚РѕСЂ
 	hd44780_command(HD44780_CGADDR(0));
 	for (uint8_t i = 0; i < 16*2; i++)
 		lcd_put_char(pgm_read_byte(&lcd_user_symbols_code[i]));
@@ -408,11 +408,11 @@ inline void ui_init() {
 
 
 /**
- * Включает подсветку экрана
+ * Р’РєР»СЋС‡Р°РµС‚ РїРѕРґСЃРІРµС‚РєСѓ СЌРєСЂР°РЅР°
  */
 inline void lcdEnableHighlight(bool enable) {
 #if ENABLE_LCD_HIGHLIGHT
-	if ( enable ) 
+	if ( enable )
 		PORT(LCD_HIGHLIGHT_PORT) |= _BV(LCD_HIGHLIGHT_PIN);
 	else
 		PORT(LCD_HIGHLIGHT_PORT) &= ~_BV(LCD_HIGHLIGHT_PIN);
@@ -421,12 +421,12 @@ inline void lcdEnableHighlight(bool enable) {
 
 
 /*
- * Иннициализация клавиатуры
- */ 
+ * РРЅРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєР»Р°РІРёР°С‚СѓСЂС‹
+ */
 inline void keyboardInit() {
-	// конфигурируем пин линии на чтение
+	// РєРѕРЅС„РёРіСѓСЂРёСЂСѓРµРј РїРёРЅ Р»РёРЅРёРё РЅР° С‡С‚РµРЅРёРµ
 	DDR(KEYBOARD_LINE_PORT) &= ~_BV(KEYBOARD_LINE_PIN);
-	// включаем подтягивающий резистор
+	// РІРєР»СЋС‡Р°РµРј РїРѕРґС‚СЏРіРёРІР°СЋС‰РёР№ СЂРµР·РёСЃС‚РѕСЂ
 	PORT(KEYBOARD_LINE_PORT) |= _BV(KEYBOARD_LINE_PIN);
 }
 
@@ -441,22 +441,22 @@ inline uint8_t key_is_repeated(uint8_t key) {
 
 
 /*
- * Опрашивает клавиатуру, инкрементируя или сбрасывая счетчики key_counter. 
- * Вызов не должен пересекаться с вызывами процедур LCD.
+ * РћРїСЂР°С€РёРІР°РµС‚ РєР»Р°РІРёР°С‚СѓСЂСѓ, РёРЅРєСЂРµРјРµРЅС‚РёСЂСѓСЏ РёР»Рё СЃР±СЂР°СЃС‹РІР°СЏ СЃС‡РµС‚С‡РёРєРё key_counter.
+ * Р’С‹Р·РѕРІ РЅРµ РґРѕР»Р¶РµРЅ РїРµСЂРµСЃРµРєР°С‚СЊСЃСЏ СЃ РІС‹Р·С‹РІР°РјРё РїСЂРѕС†РµРґСѓСЂ LCD.
  */
 static inline void keyboardCheck() {
-	// конфигурируем шину данных на вывод
+	// РєРѕРЅС„РёРіСѓСЂРёСЂСѓРµРј С€РёРЅСѓ РґР°РЅРЅС‹С… РЅР° РІС‹РІРѕРґ
 	DDR(KEYBOARD_DATA_PORT) |= _BV(KEYBOARD_PIN_ENTER)|_BV(KEYBOARD_PIN_ESC)|_BV(KEYBOARD_PIN_UP)|_BV(KEYBOARD_PIN_DOWN);
 	for (uint8_t key = 0; key < 4; key++ ) {
-		// устанавливаем "1" на всех линиях шины данных
+		// СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј "1" РЅР° РІСЃРµС… Р»РёРЅРёСЏС… С€РёРЅС‹ РґР°РЅРЅС‹С…
 		PORT(KEYBOARD_DATA_PORT) |= _BV(KEYBOARD_PIN_ENTER)|_BV(KEYBOARD_PIN_ESC)|_BV(KEYBOARD_PIN_UP)|_BV(KEYBOARD_PIN_DOWN);
-		// устанавливаем в "0" линию опрашиваемой кнопки
+		// СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІ "0" Р»РёРЅРёСЋ РѕРїСЂР°С€РёРІР°РµРјРѕР№ РєРЅРѕРїРєРё
 		PORT(KEYBOARD_DATA_PORT) &= ~_BV(key + KEYBOARD_PIN_ENTER);
-		// если убрать эту задержку, то результат будет получаться сдвинутым, т.е., вместо enter будет считываться esc,
-		// вместо esc - up, вместо up - down, вместо down - enter [!!!]
+		// РµСЃР»Рё СѓР±СЂР°С‚СЊ СЌС‚Сѓ Р·Р°РґРµСЂР¶РєСѓ, С‚Рѕ СЂРµР·СѓР»СЊС‚Р°С‚ Р±СѓРґРµС‚ РїРѕР»СѓС‡Р°С‚СЊСЃСЏ СЃРґРІРёРЅСѓС‚С‹Рј, С‚.Рµ., РІРјРµСЃС‚Рѕ enter Р±СѓРґРµС‚ СЃС‡РёС‚С‹РІР°С‚СЊСЃСЏ esc,
+		// РІРјРµСЃС‚Рѕ esc - up, РІРјРµСЃС‚Рѕ up - down, РІРјРµСЃС‚Рѕ down - enter [!!!]
 		_delay_us(1);
 		key_click_flag[key] = false;
-		if ( !(PIN(KEYBOARD_LINE_PORT) & _BV(KEYBOARD_LINE_PIN)) ) {			
+		if ( !(PIN(KEYBOARD_LINE_PORT) & _BV(KEYBOARD_LINE_PIN)) ) {
 			if ( key_counter[key] != 0xFF )
 				key_counter[key]++;
 		} else {
@@ -467,11 +467,11 @@ static inline void keyboardCheck() {
 	}
 	key_click_flag[KEY_UP_or_DOWN] = key_click_flag[KEY_UP] | key_click_flag[KEY_DOWN] | key_is_repeated(KEY_UP) | key_is_repeated(KEY_DOWN);
 	//key_up_minus_down = key_click_flag[KEY_UP] - key_click_flag[KEY_DOWN];
-	
+
 	key_up_minus_down = 0;
-	if ( key_is_repeated(KEY_UP) || key_click_flag[KEY_UP] ) 
+	if ( key_is_repeated(KEY_UP) || key_click_flag[KEY_UP] )
 		key_up_minus_down++;
-	if ( key_is_repeated(KEY_DOWN) || key_click_flag[KEY_DOWN] ) 
+	if ( key_is_repeated(KEY_DOWN) || key_click_flag[KEY_DOWN] )
 		key_up_minus_down--;
 
 #if ENABLE_LCD_HIGHLIGHT
@@ -493,12 +493,12 @@ static inline void keyboardCheck() {
 
 
 /**
- * Вывод дробного числа на LCD
+ * Р’С‹РІРѕРґ РґСЂРѕР±РЅРѕРіРѕ С‡РёСЃР»Р° РЅР° LCD
  *
- * digits_mask - определяет, сколько знаков рисовать, для одного знака - 1, для 2х - 10, для 3х - 100, и т.д.
- * digits_whole - сколько знаков содержит целая часть
+ * digits_mask - РѕРїСЂРµРґРµР»СЏРµС‚, СЃРєРѕР»СЊРєРѕ Р·РЅР°РєРѕРІ СЂРёСЃРѕРІР°С‚СЊ, РґР»СЏ РѕРґРЅРѕРіРѕ Р·РЅР°РєР° - 1, РґР»СЏ 2С… - 10, РґР»СЏ 3С… - 100, Рё С‚.Рґ.
+ * digits_whole - СЃРєРѕР»СЊРєРѕ Р·РЅР°РєРѕРІ СЃРѕРґРµСЂР¶РёС‚ С†РµР»Р°СЏ С‡Р°СЃС‚СЊ
  */
-void print_float(uint16_t val, uint16_t digits_mask, uint8_t digits_whole) {	
+void print_float(uint16_t val, uint16_t digits_mask, uint8_t digits_whole) {
 	for (uint8_t i = 0; ; i++) {
 		if ( i == digits_whole )
 			lcd_put_char('.');
@@ -515,15 +515,15 @@ void print_float(uint16_t val, uint16_t digits_mask, uint8_t digits_whole) {
 
 
 /**
- * Выводит на экран значение частоты
+ * Р’С‹РІРѕРґРёС‚ РЅР° СЌРєСЂР°РЅ Р·РЅР°С‡РµРЅРёРµ С‡Р°СЃС‚РѕС‚С‹
  */
 inline void print_frequency(uint16_t f) {
 	if ( f == 0 || f >= 9999 ) {
 		print_string(str_crash);
 	} else {
 		print_float(f, 1000, 2);
-		lcd_put_char(0xA1);	// Г
-		lcd_put_char(0xE5);	// ц
+		lcd_put_char(0xA1);	// Р“
+		lcd_put_char(0xE5);	// С†
 	}
 
 }
@@ -531,7 +531,7 @@ inline void print_frequency(uint16_t f) {
 
 
 /*
- * Выводит на экран напряжение (В десятых долях В)
+ * Р’С‹РІРѕРґРёС‚ РЅР° СЌРєСЂР°РЅ РЅР°РїСЂСЏР¶РµРЅРёРµ (Р’ РґРµСЃСЏС‚С‹С… РґРѕР»СЏС… Р’)
  */
 inline void print_voltage(uint16_t v) {
 	print_float(v, 1000, 3);
@@ -540,7 +540,7 @@ inline void print_voltage(uint16_t v) {
 
 
 /*
- * Выводит на экран напряжение (в сотых долях В)
+ * Р’С‹РІРѕРґРёС‚ РЅР° СЌРєСЂР°РЅ РЅР°РїСЂСЏР¶РµРЅРёРµ (РІ СЃРѕС‚С‹С… РґРѕР»СЏС… Р’)
  */
 inline void print_voltage_2(uint16_t v) {
 	print_float(v, 100, 1);
@@ -550,7 +550,7 @@ inline void print_voltage_2(uint16_t v) {
 
 
 /**
- * Выводит на экран температуру
+ * Р’С‹РІРѕРґРёС‚ РЅР° СЌРєСЂР°РЅ С‚РµРјРїРµСЂР°С‚СѓСЂСѓ
  */
 inline void print_temperature(uint16_t t) {
 	print_float(t, 100, 2);
@@ -564,7 +564,7 @@ void _print_byte_2(uint8_t b) {
 }
 
 /**
- * Печатает текущее время
+ * РџРµС‡Р°С‚Р°РµС‚ С‚РµРєСѓС‰РµРµ РІСЂРµРјСЏ
  */
 inline void print_current_time() {
 	//print_float(time_hour, 10, 2);
@@ -580,20 +580,20 @@ inline void print_current_time() {
 
 
 /**
- * Печатает время без секунд
+ * РџРµС‡Р°С‚Р°РµС‚ РІСЂРµРјСЏ Р±РµР· СЃРµРєСѓРЅРґ
  */
 inline void print_short_time(uint16_t time) {
 	if ( time < 24*60 ) {
 		_print_byte_2(time / 60);
 		lcd_put_char(':');
-		_print_byte_2(time % 60);	
+		_print_byte_2(time % 60);
 	}
 }
 
 
 
 /**
- * Вывод строки на LCD
+ * Р’С‹РІРѕРґ СЃС‚СЂРѕРєРё РЅР° LCD
  */
 void print_string(PGM_P str) {
 	while ( true ) {
@@ -606,9 +606,9 @@ void print_string(PGM_P str) {
 
 
 /**
- * Выводит на экран слово без стартовых нулей
+ * Р’С‹РІРѕРґРёС‚ РЅР° СЌРєСЂР°РЅ СЃР»РѕРІРѕ Р±РµР· СЃС‚Р°СЂС‚РѕРІС‹С… РЅСѓР»РµР№
  */
-void print_word(uint16_t w) {		// [!!!] а нельзя ли оптимизировать?
+void print_word(uint16_t w) {		// [!!!] Р° РЅРµР»СЊР·СЏ Р»Рё РѕРїС‚РёРјРёР·РёСЂРѕРІР°С‚СЊ?
 	uint16_t m = 1;
 	uint8_t i = 1;
 	for ( ; i < 5; i++) {
@@ -633,7 +633,7 @@ void print_word(uint16_t w) {		// [!!!] а нельзя ли оптимизировать?
 
 
 /**
- * Печатает строку, в которой допустимо использование специальных команд OUT_xxx
+ * РџРµС‡Р°С‚Р°РµС‚ СЃС‚СЂРѕРєСѓ, РІ РєРѕС‚РѕСЂРѕР№ РґРѕРїСѓСЃС‚РёРјРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ СЃРїРµС†РёР°Р»СЊРЅС‹С… РєРѕРјР°РЅРґ OUT_xxx
  */
 void print(PGM_P str) {
 	while ( true ) {
@@ -690,7 +690,7 @@ void print(PGM_P str) {
 
 
 /**
- * Перерисовывает экран для текущего окна
+ * РџРµСЂРµСЂРёСЃРѕРІС‹РІР°РµС‚ СЌРєСЂР°РЅ РґР»СЏ С‚РµРєСѓС‰РµРіРѕ РѕРєРЅР°
  */
 inline void drawLCD() {
 	lcd_clear();
@@ -708,8 +708,8 @@ inline void drawLCD() {
 			case MSG_BOX_SAVE_ALL:
 				print_string(str_save_all);
 				break;
-				
-		}		
+
+		}
 		lcd_goto(1, 1);
 		print_string(str_yes);
 		lcd_goto(1, 12);
@@ -717,13 +717,13 @@ inline void drawLCD() {
 		lcd_goto(1, ui_yes_no_dialog_result ? 0 : 11);
 		lcd_put_char(CH_SELECTOR);
 		return;
-	} 
+	}
 //	if ( screen < SCREEN_SETTINGS_PROTECTION_PARAMS ) {
 //		print(&ui_screens_data[pgm_read_word_near(&ui_screens_offsets)]);
 
 
 	if ( screen == SCREEN_INFO ) {
-		print(&ui_screens_data[UI_DATA_OFFSET_SCREEN_MAIN]);	
+		print(&ui_screens_data[UI_DATA_OFFSET_SCREEN_MAIN]);
 	} else if ( screen == SCREEN_SETTINGS_TIME ) {
 		print(&ui_screens_data[UI_DATA_OFFSET_SCREEN_SETTINGS_TIME]);
 	} else if ( screen == SCREEN_SETTINGS_PROTECTION ) {
@@ -745,15 +745,15 @@ inline void drawLCD() {
 	} else if ( screen == SCREEN_CHARGE_PROCESS ) {
 		print(&ui_screens_data[UI_DATA_OFFSET_SCREEN_CHARGE_PROCESS]);
 
-		// Выводим полоску индикатора зарядки
-		int16_t percent10 = 10*accum_charge_min;		
+		// Р’С‹РІРѕРґРёРј РїРѕР»РѕСЃРєСѓ РёРЅРґРёРєР°С‚РѕСЂР° Р·Р°СЂСЏРґРєРё
+		int16_t percent10 = 10*accum_charge_min;
 		percent10 /= accum_charge_time*60;
-		for ( uint8_t i = 0; i < 10; i++ ) 
+		for ( uint8_t i = 0; i < 10; i++ )
 			lcd_put_char(i < (uint8_t)percent10 ? 0xFF : ' ');
 	} else if ( screen == SCREEN_SETTINGS_TIME_PARAMS ) {
 		print(&ui_screens_data[UI_DATA_OFFSET_SCREEN_SETTINGS_TIME_PARAMS]);
 		lcd_put_char(settings_time_correction_plus ? '+' : '-');
-		// позиционируем курсор
+		// РїРѕР·РёС†РёРѕРЅРёСЂСѓРµРј РєСѓСЂСЃРѕСЂ
 		hd44780_command(pgm_read_byte(&ui_time_settings_cursor[ui_settings_cursor]));
 	} else if ( screen == SCREEN_SETTINGS_PROTECTION_PARAMS ) {
 		if ( ui_settings_cursor < 2 ) {
@@ -767,7 +767,7 @@ inline void drawLCD() {
 
 
 
-/* [!!!] это дебаговый код для вывода на экран значения time_correct_inc_interval
+/* [!!!] СЌС‚Рѕ РґРµР±Р°РіРѕРІС‹Р№ РєРѕРґ РґР»СЏ РІС‹РІРѕРґР° РЅР° СЌРєСЂР°РЅ Р·РЅР°С‡РµРЅРёСЏ time_correct_inc_interval
 	lcd_goto(0, 0);
 	uint32_t val = time_correct_inc_interval;
 	uint32_t digits_mask = 1000000000;
@@ -783,17 +783,17 @@ inline void drawLCD() {
 
 		if ( ui_settings_cursor < 2 ) {
 			print(&ui_screens_data[UI_DATA_OFFSET_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_1]);
-			lcd_goto(ui_settings_cursor, 10);			
+			lcd_goto(ui_settings_cursor, 10);
 		} else {
 			print(&ui_screens_data[UI_DATA_OFFSET_SCREEN_SETTINGS_ACCUMULATOR_PARAMS_2]);
-			lcd_goto(ui_settings_cursor-2, ui_settings_cursor == 2 ? 12 : 4);	
+			lcd_goto(ui_settings_cursor-2, ui_settings_cursor == 2 ? 12 : 4);
 		}
 		lcd_enable_cursor(true);
 
 	} else if ( screen == SCREEN_CRASHES_HISTORY ) {
 		print_word(ui_crash_index+1);
 		print_data_offset = ui_crash_index;
-		print(&ui_screens_data[UI_DATA_OFFSET_SCREEN_CRASHES_HISTORY]);		
+		print(&ui_screens_data[UI_DATA_OFFSET_SCREEN_CRASHES_HISTORY]);
 /*
 		lcd_put_char(':');
 		lcd_put_char(' ');
@@ -813,9 +813,9 @@ inline void drawLCD() {
 */
 	}
 /*
-	if ( screen == SCREEN_SETTINGS_TIME_PARAMS ) {		
+	if ( screen == SCREEN_SETTINGS_TIME_PARAMS ) {
 		lcd_put_char(settings_time_correction_plus ? '+' : '-');
-		// позиционируем курсор
+		// РїРѕР·РёС†РёРѕРЅРёСЂСѓРµРј РєСѓСЂСЃРѕСЂ
 		hd44780_command(pgm_read_byte(&ui_time_settings_cursor[ui_settings_cursor]));
 	}
 */
@@ -852,7 +852,7 @@ inline void ui_handle_byte_editor(uint8_t *val, uint8_t max) {
 	*val += key_up_minus_down;
 	if ( *val == 0xFF )
 		*val = 0;
-	else if ( *val > max ) 
+	else if ( *val > max )
 		*val = max;
 }
 
@@ -867,7 +867,7 @@ inline void ui_handle_word_editor(uint8_t index, uint16_t min, uint16_t max) {
 /*
 inline void ui_handle_word_editor(uint8_t index, uint16_t min, uint16_t max) {
 	if ( key_up_minus_down == 1 ) {
-		if ( data_16[index] < max ) 
+		if ( data_16[index] < max )
 			data_16[index]++;
 		else
 			data_16[index] = max;
@@ -883,13 +883,13 @@ inline void ui_handle_word_editor(uint8_t index, uint16_t min, uint16_t max) {
 
 
 /**
- * Обработчик клавиатуры
+ * РћР±СЂР°Р±РѕС‚С‡РёРє РєР»Р°РІРёР°С‚СѓСЂС‹
  */
 inline void keyHandle() {
 	if ( key_click_flag[KEY_UP_or_DOWN] | key_click_flag[KEY_ENTER] | key_click_flag[KEY_ESC] )
 		lcd_update_flag = true;
 
-	// диалог "Да/Нет"
+	// РґРёР°Р»РѕРі "Р”Р°/РќРµС‚"
 	if ( ui_show_yes_no_dialog_flag != MSG_BOX_NONE ) {
 		if ( key_click_flag[KEY_UP_or_DOWN] ) {
 			ui_yes_no_dialog_result = !ui_yes_no_dialog_result;
@@ -923,18 +923,18 @@ inline void keyHandle() {
 							break;
 						case SCREEN_SETTINGS_ACCUMULATOR_PARAMS:
 							accum_state = ACB_STATE_DISCHARGE;
-							accumEnableDischarge(true);						
-							break;	
+							accumEnableDischarge(true);
+							break;
 					} // switch
 				}	//
-			} // if ("Да")
+			} // if ("Р”Р°")
 			ui_show_yes_no_dialog_flag = MSG_BOX_NONE;
 		}
 
-	
-	// главное меню
+
+	// РіР»Р°РІРЅРѕРµ РјРµРЅСЋ
 	} else if ( key_handle_main_menu(SCREEN_INFO, SCREEN_SETTINGS_ACCUMULATOR) ) {
-		// Удержание клавиши ENTER - сохранение всех настроек и статистики (в любом случае, они сохраняются в начале суток)
+		// РЈРґРµСЂР¶Р°РЅРёРµ РєР»Р°РІРёС€Рё ENTER - СЃРѕС…СЂР°РЅРµРЅРёРµ РІСЃРµС… РЅР°СЃС‚СЂРѕРµРє Рё СЃС‚Р°С‚РёСЃС‚РёРєРё (РІ Р»СЋР±РѕРј СЃР»СѓС‡Р°Рµ, РѕРЅРё СЃРѕС…СЂР°РЅСЏСЋС‚СЃСЏ РІ РЅР°С‡Р°Р»Рµ СЃСѓС‚РѕРє)
 		if ( key_is_repeated(KEY_ENTER) && screen == SCREEN_INFO ) {
 			ui_show_yes_no_dialog_flag = MSG_BOX_SAVE_ALL;
 			ui_yes_no_dialog_result = false;
@@ -967,20 +967,20 @@ inline void keyHandle() {
 					lcd_enable_cursor(true);
 					break;
 				case SCREEN_SETTINGS_ACCUMULATOR:
-					screen = SCREEN_SETTINGS_ACCUMULATOR_PARAMS;					
+					screen = SCREEN_SETTINGS_ACCUMULATOR_PARAMS;
 					break;
 			}
 
 		}
 
-	// меню статистики
+	// РјРµРЅСЋ СЃС‚Р°С‚РёСЃС‚РёРєРё
 	} else if ( key_handle_main_menu(SCREEN_STATISTIC_VOLTAGE, SCREEN_STATISTIC_ACCUMULATOR) ) {
 		if ( key_click_flag[KEY_ENTER] ) {
 			ui_show_yes_no_dialog_flag = MSG_BOX_CLEAR_STATISTIC;
 			ui_yes_no_dialog_result = false;
 		}
 
-	// Окно настройки времени
+	// РћРєРЅРѕ РЅР°СЃС‚СЂРѕР№РєРё РІСЂРµРјРµРЅРё
 	} else if ( screen == SCREEN_SETTINGS_TIME_PARAMS ) {
 		if ( key_click_flag[KEY_ENTER] ) {
 			ui_settings_cursor++;
@@ -992,13 +992,13 @@ inline void keyHandle() {
 		}
 		if ( key_click_flag[KEY_UP_or_DOWN] ) {
 			switch ( ui_settings_cursor ) {
-				case 0:		// часы
+				case 0:		// С‡Р°СЃС‹
 					ui_handle_byte_editor(&time_hour, 23);
 					break;
-				case 1:		// минуты
+				case 1:		// РјРёРЅСѓС‚С‹
 					ui_handle_byte_editor(&time_min, 59);
 					break;
-				case 2:		// сброс секунд и сотых долей
+				case 2:		// СЃР±СЂРѕСЃ СЃРµРєСѓРЅРґ Рё СЃРѕС‚С‹С… РґРѕР»РµР№
 					if ( time_sec > 30 ) {
 						time_sec = 59;
 						time_hsec = 99;
@@ -1007,10 +1007,10 @@ inline void keyHandle() {
 						time_hsec = 0;
 					}
 					break;
-				case 3:		// изменение знака коррекции
+				case 3:		// РёР·РјРµРЅРµРЅРёРµ Р·РЅР°РєР° РєРѕСЂСЂРµРєС†РёРё
 					settings_time_correction_plus = !settings_time_correction_plus;
 					break;
-				case 4:		// изменение величины коррекции
+				case 4:		// РёР·РјРµРЅРµРЅРёРµ РІРµР»РёС‡РёРЅС‹ РєРѕСЂСЂРµРєС†РёРё
 					//ui_handle_word_editor(&settings_time_correction_hs, 0, 60000);
 					ui_handle_word_editor(VI16_SETTINGS_TIME_CORRECTION_HS, 0, 60000);
 					init_time_correction();
@@ -1018,7 +1018,7 @@ inline void keyHandle() {
 			}
 		}
 
-	// Окно настройки параметров защиты
+	// РћРєРЅРѕ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ Р·Р°С‰РёС‚С‹
 	} else if ( screen == SCREEN_SETTINGS_PROTECTION_PARAMS ) {
 		if ( key_click_flag[KEY_ENTER] ) {
 			ui_settings_cursor++;
@@ -1035,7 +1035,7 @@ inline void keyHandle() {
 				case 0:		// Umin
 					ui_handle_word_editor(VI16_UI_SETTINGS_U_MIN, 1200, 2150);
 					break;
-				case 1:		// Umax				
+				case 1:		// Umax
 					ui_handle_word_editor(VI16_UI_SETTINGS_U_MAX, 2300, 3000);
 					break;
 				case 2:		// t repeat
@@ -1046,7 +1046,7 @@ inline void keyHandle() {
 					break;
 			}
 		}
-	// Окно настройки параметров аккумулятора
+	// РћРєРЅРѕ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ Р°РєРєСѓРјСѓР»СЏС‚РѕСЂР°
 	} else if ( screen == SCREEN_SETTINGS_ACCUMULATOR_PARAMS ) {
 		if ( key_click_flag[KEY_ENTER] ) {
 			ui_settings_cursor++;
@@ -1072,14 +1072,14 @@ inline void keyHandle() {
 					if ( accum_state == ACB_STATE_FREE ) {
 						ui_show_yes_no_dialog_flag = MSG_BOX_CHARGE_ACCUM;
 						ui_yes_no_dialog_result = false;
-					} else  if ( accum_state == ACB_STATE_CHARGE ) {					
+					} else  if ( accum_state == ACB_STATE_CHARGE ) {
 						screen = SCREEN_CHARGE_PROCESS;
 					}
 					break;
 			}
 		} // if
 
-	// Окно просмотра статистики аварий 
+	// РћРєРЅРѕ РїСЂРѕСЃРјРѕС‚СЂР° СЃС‚Р°С‚РёСЃС‚РёРєРё Р°РІР°СЂРёР№
 	} else if ( screen == SCREEN_CRASHES_HISTORY ) {
 		ui_handle_byte_editor(&ui_crash_index, stat_crashes_count-1);
 		if ( key_click_flag[KEY_ENTER] ) {
@@ -1089,7 +1089,7 @@ inline void keyHandle() {
 			screen = SCREEN_CRASHES;
 		}
 
-	// Окно информации о процессе зарядки АКБ
+	// РћРєРЅРѕ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РїСЂРѕС†РµСЃСЃРµ Р·Р°СЂСЏРґРєРё РђРљР‘
 	} else if ( screen == SCREEN_CHARGE_PROCESS ) {
 		if ( key_click_flag[KEY_ESC] || key_click_flag[KEY_ENTER] )
 			screen = SCREEN_SETTINGS_ACCUMULATOR_PARAMS;
@@ -1098,6 +1098,3 @@ inline void keyHandle() {
 
 
 }
-
-
-

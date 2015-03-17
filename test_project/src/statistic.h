@@ -21,10 +21,10 @@ inline void update_statistic_(uint8_t index, uint16_t time, uint16_t value) {
 }
 
 /**
- * Обновляет статистику согласно текущим показаниям напряжения, частоты и температуры
+ * РћР±РЅРѕРІР»СЏРµС‚ СЃС‚Р°С‚РёСЃС‚РёРєСѓ СЃРѕРіР»Р°СЃРЅРѕ С‚РµРєСѓС‰РёРј РїРѕРєР°Р·Р°РЅРёСЏРј РЅР°РїСЂСЏР¶РµРЅРёСЏ, С‡Р°СЃС‚РѕС‚С‹ Рё С‚РµРјРїРµСЂР°С‚СѓСЂС‹
  */
 inline void update_statistic() {
-	uint16_t time = time_hour*60 + time_min;		// текущее время в минутах 
+	uint16_t time = time_hour*60 + time_min;		// С‚РµРєСѓС‰РµРµ РІСЂРµРјСЏ РІ РјРёРЅСѓС‚Р°С… 
 
 	update_statistic_(VI16_STAT_MAX_VOLTAGE, time, power_voltage);
 	update_statistic_(VI16_STAT_MAX_FREQUENCY, time, power_frequency);
@@ -42,7 +42,7 @@ inline void reset_statistic_(uint8_t index, uint16_t time, uint16_t value) {
 
 
 /**
- * Сбрасывает статистику по напряжению
+ * РЎР±СЂР°СЃС‹РІР°РµС‚ СЃС‚Р°С‚РёСЃС‚РёРєСѓ РїРѕ РЅР°РїСЂСЏР¶РµРЅРёСЋ
  */
 inline void reset_statistic_voltage(uint16_t time) {
 	reset_statistic_(VI16_STAT_MAX_VOLTAGE, time, power_voltage);
@@ -51,7 +51,7 @@ inline void reset_statistic_voltage(uint16_t time) {
 
 
 /**
- * Сбрасывает статистику по частоте
+ * РЎР±СЂР°СЃС‹РІР°РµС‚ СЃС‚Р°С‚РёСЃС‚РёРєСѓ РїРѕ С‡Р°СЃС‚РѕС‚Рµ
  */
 inline void reset_statistic_frequency(uint16_t time) {
 	uint16_t f = ( power_frequency < 2500 || power_frequency >= 7500 ) ? 5000 : power_frequency;
@@ -61,7 +61,7 @@ inline void reset_statistic_frequency(uint16_t time) {
 
 
 /**
- * Сбрасывает статистику по напряжению
+ * РЎР±СЂР°СЃС‹РІР°РµС‚ СЃС‚Р°С‚РёСЃС‚РёРєСѓ РїРѕ РЅР°РїСЂСЏР¶РµРЅРёСЋ
  */
 inline void reset_statistic_temperature(uint16_t time) {
 	reset_statistic_(VI16_STAT_MAX_TEMPERATURE, time, temperature);
@@ -69,7 +69,7 @@ inline void reset_statistic_temperature(uint16_t time) {
 
 
 /**
- * Сбрасывает статистику по авариям
+ * РЎР±СЂР°СЃС‹РІР°РµС‚ СЃС‚Р°С‚РёСЃС‚РёРєСѓ РїРѕ Р°РІР°СЂРёСЏРј
  */
 inline void reset_statistic_crashes() {
 	stat_crashes_count = 0;
@@ -77,10 +77,10 @@ inline void reset_statistic_crashes() {
 
 
 /**
- * Сбрасывает всю статистику
+ * РЎР±СЂР°СЃС‹РІР°РµС‚ РІСЃСЋ СЃС‚Р°С‚РёСЃС‚РёРєСѓ
  */
 inline void reset_statistic() {
-	uint16_t time = time_hour*60 + time_min;		// текущее время в минутах 
+	uint16_t time = time_hour*60 + time_min;		// С‚РµРєСѓС‰РµРµ РІСЂРµРјСЏ РІ РјРёРЅСѓС‚Р°С… 
 	reset_statistic_voltage(time);
 	reset_statistic_frequency(time);
 	reset_statistic_temperature(time);
@@ -90,19 +90,19 @@ inline void reset_statistic() {
 
 
 /**
- * Добавляет событие о начале аварии в статистику
+ * Р”РѕР±Р°РІР»СЏРµС‚ СЃРѕР±С‹С‚РёРµ Рѕ РЅР°С‡Р°Р»Рµ Р°РІР°СЂРёРё РІ СЃС‚Р°С‚РёСЃС‚РёРєСѓ
  */
 inline void statistic_add_crash() {
-	// сдвигаем очередь записей выкидывая самую старую
+	// СЃРґРІРёРіР°РµРј РѕС‡РµСЂРµРґСЊ Р·Р°РїРёСЃРµР№ РІС‹РєРёРґС‹РІР°СЏ СЃР°РјСѓСЋ СЃС‚Р°СЂСѓСЋ
 	for ( uint8_t i = 10-1; i >= 1; i-- ) {
 		data_16[VI_16_STAT_CRASH_U_1+i] = data_16[VI_16_STAT_CRASH_U_1+i-1];
 		data_16[VI_16_STAT_CRASH_T_BEGIN_1+i] = data_16[VI_16_STAT_CRASH_T_BEGIN_1+i-1];
 		data_16[VI_16_STAT_CRASH_T_END_1+i] = data_16[VI_16_STAT_CRASH_T_END_1+i-1];
 		data_16[VI_16_STAT_CRASH_DAY_1+i] = data_16[VI_16_STAT_CRASH_DAY_1+i-1];
 	}
-	// увеличиваем счетчик, если предел не достигнут
+	// СѓРІРµР»РёС‡РёРІР°РµРј СЃС‡РµС‚С‡РёРє, РµСЃР»Рё РїСЂРµРґРµР» РЅРµ РґРѕСЃС‚РёРіРЅСѓС‚
 	stat_crashes_count++;
-	// заполняем данные о последней аварии
+	// Р·Р°РїРѕР»РЅСЏРµРј РґР°РЅРЅС‹Рµ Рѕ РїРѕСЃР»РµРґРЅРµР№ Р°РІР°СЂРёРё
 	data_16[VI_16_STAT_CRASH_U_1] = power_voltage;
 	data_16[VI_16_STAT_CRASH_T_BEGIN_1] = time_hour*60 + time_min;
 	data_16[VI_16_STAT_CRASH_T_END_1] = 0xFFFF;
@@ -111,7 +111,7 @@ inline void statistic_add_crash() {
 
 
 /**
- * Добавляет событие об окончании аварии в статистику
+ * Р”РѕР±Р°РІР»СЏРµС‚ СЃРѕР±С‹С‚РёРµ РѕР± РѕРєРѕРЅС‡Р°РЅРёРё Р°РІР°СЂРёРё РІ СЃС‚Р°С‚РёСЃС‚РёРєСѓ
  */
 inline void statistic_end_crash() {
 	data_16[VI_16_STAT_CRASH_T_END_1] = time_hour*60 + time_min;

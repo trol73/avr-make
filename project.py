@@ -26,7 +26,6 @@ class Project:
                     relative = f
                     if relative.startswith(self.root_path):
                         relative = relative[len(self.root_path)+1:]
-                    print relative
                     self._full_sources_list.add(relative)
 
     def get(self, name):
