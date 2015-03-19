@@ -75,6 +75,10 @@ class AvrCompiler(Compiler):
 
         arg_cpu = '-DF_CPU=' + str(self.project.get('frequency')) + ' -mmcu=' + self.project.get('mcu')
         arg_compile = '-Os -g0 -c -std=gnu99'#'-funsigned-char -funsigned-bitfields -O1 -fpack-struct -fshort-enums -g2 -Wall -c -std=gnu99 -MD -MP -MF'
+        user_options = self.project.get('compiler_options')
+        if user_options is not None:
+            for option in user_options:
+                arg_compile += ' ' + option
         cmd = self.path_avr_gcc + ' ' + arg_compile + ' ' + arg_cpu + ' ' + self.get_defines_args() + full_src + ' -o ' + full_out + '.o'
 
         os.chdir(os.path.dirname(full_src))
@@ -88,7 +92,13 @@ class AvrCompiler(Compiler):
         for obj in self.compiled_objects_path:
             objects += obj + ' '
         arg_mcu = '-mmcu=' + project.get('mcu')
-        cmd = self.path_avr_gcc + ' -o ' + elf_name + ' ' + objects + arg_mcu
+        user_options = self.project.get('linker_options')
+        user = ''
+        if user_options is not None:
+            for option in user_options:
+                user += ' ' + option
+
+        cmd = self.path_avr_gcc + user + ' -o ' + elf_name + ' ' + objects + arg_mcu
         utils.remove_file_if_exist(elf_name)
         self.execute(cmd)
         #avr-gcc.exe" -o MoodLamp.elf  MoodLamp.o   -Wl,-Map="MoodLamp.map" -Wl,-lm   -mmcu=attiny13
