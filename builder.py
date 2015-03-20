@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+import sys
 from compilers.avr import AvrCompiler
 from project import Project
 
@@ -8,7 +9,6 @@ __author__ = 'trol'
 
 MAKE_FILE_NAME = 'make.builder'
 
-#os.chdir('test_project')
 project_root = os.getcwd()
 
 #print "project:", project_root
@@ -23,7 +23,7 @@ prj.load(MAKE_FILE_NAME)
 
 compiler = AvrCompiler(prj)
 compiler.init()
-compiler.build()
+compiler.run(sys.argv[1:])
 
 # avr-gcc -Wall -Os -DF_CPU=16000000 -mmcu=atmega328p -c main.c -o main.o
 # main.c:18:6: warning: return type of 'main' is not 'int' [-Wmain]

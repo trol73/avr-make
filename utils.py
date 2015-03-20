@@ -37,6 +37,15 @@ def mkdir_for_file_out(filename):
         os.makedirs(os.path.dirname(filename))
 
 
+def rmdir_for_file_out(filename):
+    parent = os.path.dirname(filename)
+    if os.path.exists(parent) and len(os.listdir(parent)) == 0:
+        os.rmdir(parent)
+        rmdir_for_file_out(parent)
+        return True
+    return False
+
+
 def remove_file_if_exist(filename):
     if os.path.exists(filename):
         os.remove(filename)

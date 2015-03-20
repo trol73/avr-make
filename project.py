@@ -31,6 +31,11 @@ class Project:
     def get(self, name):
         return self._loc[name]
 
+    def is_empty(self, name):
+        if self.get(name) is None:
+            return True
+        return len(str(self.get(name))) == 0
+
     def get_sources(self):
         return self._full_sources_list
 

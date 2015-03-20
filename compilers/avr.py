@@ -13,6 +13,7 @@ class AvrCompiler(Compiler):
     path_avr_objcopy = None
     path_avr_objdump = None
     path_avr_size = None
+    path_avrdude = None
     path_build = None
 
     compiled_objects_path = []
@@ -42,8 +43,46 @@ class AvrCompiler(Compiler):
         if self.path_avr_size is None and utils.is_exe(CROSSPACK_DEFAULT_LOCATION + 'avr-size'):
             self.path_avr_size = CROSSPACK_DEFAULT_LOCATION + 'avr-size'
 
+        # find avrdude
+        self.path_avrdude = utils.which('avrdude')
+        if self.path_avrdude is None and utils.is_exe(CROSSPACK_DEFAULT_LOCATION + 'avrdude'):
+            self.path_avrdude = CROSSPACK_DEFAULT_LOCATION + 'avrdude'
+
 
         self.path_build = self.project.root_path + '/build'
+
+    def run(self, argv):
+        print argv
+        op_build = False
+        op_upload = False
+        op_clean = False
+        debug_build = None
+        if 'build' in argv:
+            op_build = True
+        if 'clean' in argv:
+            op_clean = True
+        if 'release' in argv:
+            if debug_build == True:
+                self.error("wrong params - 'debug' and 'release' defined simultaneously")
+            op_build = True
+            debug_build = False
+        if 'debug' in argv:
+            if debug_build == False:
+                self.error("wrong params - 'debug' and 'release' defined simultaneously")
+            op_build = True
+            debug_build = True
+        if 'upload' in argv:
+            op_upload = True
+        if len(argv) == 0:
+            op_build = True
+        if op_clean:
+            self.clean()
+        if op_build:
+            self.build()
+        if op_upload:
+            self.upload_firmware()
+
+
 
     def build(self):
         # compile files
@@ -113,16 +152,55 @@ class AvrCompiler(Compiler):
         params = '-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0  --no-change-warnings'
         cmd = self.path_avr_objcopy + ' ' + params + ' ' + self.get_elf_filepath() + ' ' + self.get_out_filepath('.eep')
         utils.remove_file_if_exist(self.get_out_filepath('.eep'))
-        os.system(cmd)
+        self.execute(cmd)
 
     def make_lst(self):
         cmd = self.path_avr_objdump + ' -h -S "' + self.get_elf_filepath() + '" > "' + self.get_out_filepath('.lst') + '"'
         utils.remove_file_if_exist(self.get_out_filepath('.lst'))
-        os.system(cmd)
+        self.execute(cmd)
+
+    def upload_firmware(self):
+        prj = self.project
+
+        if prj.is_empty('mcu'):
+            self.error("'mcu' doesn't defined")
+        if prj.is_empty('programmer'):
+            self.error("'programmer' doesn't defined")
+        if prj.is_empty('port'):
+            self.error("'port' doesn't defined")
+        if prj.is_empty('baudrate'):
+            self.error("'baudrate' doesn't defined")
+        firmware = self.get_out_filepath('.hex')
+        if not os.path.exists(firmware):
+            self.error('firmware not found - ' + firmware)
+
+        args = ' -p' + str(prj.get('mcu')) + ' -c' + str(prj.get('programmer')) + ' -P' + str(prj.get('port')) + ' -b' + str(prj.get('baudrate'))
+        args += ' -U flash:w:"' + firmware + '":i -D'
+        cmd = self.path_avrdude + args
+        self.execute(cmd)
+
+    def clean(self):
+        utils.remove_file_if_exist(self.get_out_filepath('.lst'))
+        utils.remove_file_if_exist(self.get_out_filepath('.hex'))
+        utils.remove_file_if_exist(self.get_out_filepath('.eep'))
+        utils.remove_file_if_exist(self.get_out_filepath('.elf'))
+        # .o files
+        sources = self.project.get_sources()
+        for src in sources:
+            ext = os.path.splitext(src)[1][1:]
+            full_src = self.project.root_path + '/' + src
+            if src.startswith('src/'):
+                srcn = src[len('src/'):]
+            else:
+                srcn = src
+            full_out = self.path_build + '/' + os.path.splitext(srcn)[0] + '.o'
+            if os.path.exists(full_out):
+                os.remove(full_out)
+            utils.rmdir_for_file_out(full_out)
 
     def show_size(self):
         cmd = self.path_avr_size + ' --format=avr --mcu=' + self.project.get('mcu') + ' ' + self.get_elf_filepath()
-        os.system(cmd)
+        self.execute(cmd)
 
     def get_out_filepath(self, ext):
         return self.path_build + '/' + self.project.get_name() + ext

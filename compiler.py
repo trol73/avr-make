@@ -1,4 +1,5 @@
 import os
+import sys
 
 __author__ = 'trol'
 
@@ -11,6 +12,9 @@ class Compiler:
         self.project = project
 
     def init(self):
+        pass
+
+    def run(self, argv):
         pass
 
     def build(self):
@@ -28,3 +32,19 @@ class Compiler:
         rc = os.system(cmd)
         if rc != 0:
             quit(-1)
+
+    @staticmethod
+    def error(msg):
+        if sys.stdout.isatty():
+            print '\033[1;31m' + 'error: ' + str(msg) + '\033[1;m'
+        else:
+            print 'ERROR: ' + str(msg)
+        quit(-1)
+
+    @staticmethod
+    def verbose(msg):
+        if sys.stdout.isatty():
+            print '\033[1;30m' + str(msg) + '\033[1;m'
+        else:
+            print msg
+
