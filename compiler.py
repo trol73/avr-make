@@ -48,3 +48,5 @@ class Compiler:
         else:
             print msg
 
+# all colors https://www.siafoo.net/snippet/88
+

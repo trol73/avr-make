@@ -48,7 +48,6 @@ class AvrCompiler(Compiler):
         if self.path_avrdude is None and utils.is_exe(CROSSPACK_DEFAULT_LOCATION + 'avrdude'):
             self.path_avrdude = CROSSPACK_DEFAULT_LOCATION + 'avrdude'
 
-
         self.path_build = self.project.root_path + '/build'
 
     def run(self, argv):
@@ -62,12 +61,12 @@ class AvrCompiler(Compiler):
         if 'clean' in argv:
             op_clean = True
         if 'release' in argv:
-            if debug_build == True:
+            if debug_build:
                 self.error("wrong params - 'debug' and 'release' defined simultaneously")
             op_build = True
             debug_build = False
         if 'debug' in argv:
-            if debug_build == False:
+            if not debug_build:
                 self.error("wrong params - 'debug' and 'release' defined simultaneously")
             op_build = True
             debug_build = True
@@ -162,19 +161,23 @@ class AvrCompiler(Compiler):
     def upload_firmware(self):
         prj = self.project
 
-        if prj.is_empty('mcu'):
+        if not prj.is_defined('mcu'):
             self.error("'mcu' doesn't defined")
-        if prj.is_empty('programmer'):
+        if not prj.is_defined('programmer'):
             self.error("'programmer' doesn't defined")
-        if prj.is_empty('port'):
-            self.error("'port' doesn't defined")
-        if prj.is_empty('baudrate'):
-            self.error("'baudrate' doesn't defined")
+        # if prj.is_empty('port'):
+        #     self.error("'port' doesn't defined")
+        # if prj.is_empty('baudrate'):
+        #     self.error("'baudrate' doesn't defined")
         firmware = self.get_out_filepath('.hex')
         if not os.path.exists(firmware):
             self.error('firmware not found - ' + firmware)
 
-        args = ' -p' + str(prj.get('mcu')) + ' -c' + str(prj.get('programmer')) + ' -P' + str(prj.get('port')) + ' -b' + str(prj.get('baudrate'))
+        args = ' -p' + str(prj.get('mcu')) + ' -c' + str(prj.get('programmer'))
+        if prj.is_defined('port'):
+            args += ' -P' + str(prj.get('port'))
+        if prj.is_defined('baudrate'):
+            args += ' -b' + str(prj.get('baudrate'))
         args += ' -U flash:w:"' + firmware + '":i -D'
         cmd = self.path_avrdude + args
         self.execute(cmd)

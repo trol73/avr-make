@@ -31,10 +31,11 @@ class Project:
     def get(self, name):
         return self._loc[name]
 
-    def is_empty(self, name):
-        if self.get(name) is None:
-            return True
-        return len(str(self.get(name))) == 0
+    def is_defined(self, name):
+        print self._loc
+        if name in self._loc.keys():
+            return len(str(self.get(name))) > 0
+        return False
 
     def get_sources(self):
         return self._full_sources_list
