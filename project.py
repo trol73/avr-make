@@ -32,7 +32,6 @@ class Project:
         return self._loc[name]
 
     def is_defined(self, name):
-        print self._loc
         if name in self._loc.keys():
             return len(str(self.get(name))) > 0
         return False
