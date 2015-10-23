@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
 
@@ -30,6 +31,7 @@ class Compiler:
         if self.verbose_mode:
             print cmd
         rc = os.system(cmd)
+        print rc, cmd
         if rc != 0:
             quit(-1)
 
@@ -77,6 +79,15 @@ class Compiler:
                 result += ' '
             result += arg
         return result
+
+    @staticmethod
+    def quote(path):
+        if path is None:
+            return None
+        path = path.strip()
+        if path.find(' ') > 0 and path[0] != '"' and path[0] != "'":
+            return '"' + path + '"'
+        return path
 
 # all colors https://www.siafoo.net/snippet/88
 

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 from compiler import Compiler
 import utils
@@ -14,43 +16,46 @@ class AvrCompiler(Compiler):
     path_avr_size = None
     path_avrdude = None
     path_build = None
+    avrgcc_home = None
 
     compiled_objects_path = []
 
     def init(self):
-        # find avr-gcc
-        self.path_avr_gcc = utils.which('avr-gcc')
-        # try CrossPack-AVR default location
-        if self.path_avr_gcc is None and utils.is_exe(CROSSPACK_DEFAULT_LOCATION + 'avr-gcc'):
-            self.path_avr_gcc = CROSSPACK_DEFAULT_LOCATION + 'avr-gcc'
+        if 'AVR_GCC_HOME' in os.environ.keys():
+            self.avrgcc_home = os.environ['AVR_GCC_HOME']
+        else:
+            self.avrgcc_home = None
+        if self.avrgcc_home is not None:
+            if len(self.avrgcc_home.strip()) == 0:
+                self.avrgcc_home = None
+            else:
+                if self.avrgcc_home[-1:] != '/' and self.avrgcc_home[-1:] != '\\':
+                    self.avrgcc_home += '/'
 
-        # find avr-objcopy
-        self.path_avr_objcopy = utils.which('avr-objcopy')
-        # try CrossPack-AVR default location
-        if self.path_avr_objcopy is None and utils.is_exe(CROSSPACK_DEFAULT_LOCATION + 'avr-objcopy'):
-            self.path_avr_objcopy = CROSSPACK_DEFAULT_LOCATION + 'avr-objcopy'
-
-        # find avr-objdump
-        self.path_avr_objdump = utils.which('avr-objdump')
-        # try CrossPack-AVR default location
-        if self.path_avr_objdump is None and utils.is_exe(CROSSPACK_DEFAULT_LOCATION + 'avr-objdump'):
-            self.path_avr_objdump = CROSSPACK_DEFAULT_LOCATION + 'avr-objdump'
-
-        # find avr-size
-        self.path_avr_size = utils.which('avr-size')
-        # try CrossPack-AVR default location
-        if self.path_avr_size is None and utils.is_exe(CROSSPACK_DEFAULT_LOCATION + 'avr-size'):
-            self.path_avr_size = CROSSPACK_DEFAULT_LOCATION + 'avr-size'
-
-        # find avrdude
-        self.path_avrdude = utils.which('avrdude')
-        if self.path_avrdude is None and utils.is_exe(CROSSPACK_DEFAULT_LOCATION + 'avrdude'):
-            self.path_avrdude = CROSSPACK_DEFAULT_LOCATION + 'avrdude'
+        self.path_avr_gcc = self._find_util('avr-gcc')
+        self.path_avr_objcopy = self._find_util('avr-objcopy')
+        self.path_avr_objdump = self._find_util('avr-objdump')
+        self.path_avr_size = self._find_util('avr-size')
+        self.path_avrdude = self._find_util('avrdude')
 
         self.path_build = self.project.root_path + '/build'
 
+    def _find_util(self, exe_name):
+        # try environment location
+        if self.avrgcc_home is not None and utils.is_exe(self.avrgcc_home + exe_name):
+            result = self.avrgcc_home + exe_name
+            if utils.is_windows():
+                result += '.exe'
+        # try CrossPack-AVR default location
+        elif utils.is_exe(CROSSPACK_DEFAULT_LOCATION + exe_name):
+            result = CROSSPACK_DEFAULT_LOCATION + exe_name
+        # try to find
+        else:
+            result = utils.which(exe_name)
+        return self.quote(result)
+
     def run(self, argv):
-        print 'args = ', argv
+        #print 'args = ', argv
         op_build = False
         op_upload = False
         op_clean = False
@@ -157,7 +162,10 @@ class AvrCompiler(Compiler):
             objects += obj + ' '
         arg_mcu = '-mmcu=' + project.get('mcu')
         user_options = self.project.get('linker_options')
-        options = '-Wl,--relax -Wl,--start-group -Wl,-lm  -Wl,--end-group -Wl,--gc-sections -Wl,-Map="' + map_name + '" '
+
+        options = '-Wl,--relax -Wl,--start-group -Wl,-lm  -Wl,--end-group -Wl,--gc-sections'
+        if not utils.is_windows():
+            options += ' -Wl,-Map="' + map_name + '"'
         cmd = self.string(self.path_avr_gcc, user_options, ' -o ' + elf_name, objects, options, arg_mcu)
         utils.remove_file_if_exist(elf_name)
         self.execute(cmd)
@@ -176,7 +184,11 @@ class AvrCompiler(Compiler):
         self.execute(cmd)
 
     def make_lst(self):
-        cmd = self.string(self.path_avr_objdump, '-h -S "' + self.get_elf_filepath() + '" > "' + self.get_out_filepath('.lss') + '"')
+        if utils.is_windows():
+            args = '-h -S ' + self.get_elf_filepath() + ' > ' + self.get_out_filepath('.lss')
+        else:
+            args = '-h -S "' + self.get_elf_filepath() + '" > "' + self.get_out_filepath('.lss') + '"'
+        cmd = self.string(self.path_avr_objdump, args)
         utils.remove_file_if_exist(self.get_out_filepath('.lss'))
         self.execute(cmd)
 
