@@ -27,7 +27,6 @@ f = 11.059 MHz
 115200 UBRR=5
 *****************/
 
-
 void uart_init();
 
 void uart_putc(uint8_t c);

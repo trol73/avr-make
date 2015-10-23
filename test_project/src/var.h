@@ -62,7 +62,6 @@ uint8_t key_up_minus_down;					// занчение key_click_flag[KEY_UP] - key_
 #define VI16_SETTINGS_PROTECT_REPEAT_TIME	15	// время, через которое произойдет включение и проверка напряжения в случае аварии, сек
 #define VI16_SETTINGS_PROTECT_MEASS_TIME	16	// время, проверки напряжения после аварии, сек
 
-
 #define VI_16_ACCUM_CHARGE_TIME				17	// длительность заряда АКБ в часах
 
 #define VI16_STAT_ACCUM_CYCLES				20	// количество циклов зарядки аккумулятора

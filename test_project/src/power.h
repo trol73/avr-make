@@ -26,16 +26,15 @@ inline void initPower() {
 	PORT(POWER_CONTROL_PORT) &= ~_BV(POWER_EXTERNAL_PIN);
 	PORT(POWER_CONTROL_PORT) |= _BV(POWER_SELF_PIN);
 	power_state = POWER_STATE_CRASH;
-	power_meassure_enabled = true;	
+	power_meassure_enabled = true;
 	power_rele_enabled = true;
 }
-
 
 /**
  * Включает реле питания схемы
  */
 inline void powerEnableSelf(bool enable) {
-	if ( enable ) 
+	if ( enable )
 		PORT(POWER_CONTROL_PORT) |= _BV(POWER_SELF_PIN);
 	else
 		PORT(POWER_CONTROL_PORT) &= ~_BV(POWER_SELF_PIN);
@@ -48,7 +47,7 @@ inline void powerEnableSelf(bool enable) {
  * Включает реле управления нагрузкой
  */
 inline void powerEnableExternal(bool enable) {
-	if ( enable ) 
+	if ( enable )
 		PORT(POWER_CONTROL_PORT) |= _BV(POWER_EXTERNAL_PIN);
 	else
 		PORT(POWER_CONTROL_PORT) &= ~_BV(POWER_EXTERNAL_PIN);
@@ -62,7 +61,7 @@ inline void powerUpdateState() {
 	bool low = (power_voltage < settings_protect_u_min) ;
 	bool high = (power_voltage > settings_protect_u_max);
 	bool ok = !(low || high);
-	
+
 	switch ( power_state ) {
 		case POWER_STATE_OK:
 			if ( !ok ) {
@@ -94,7 +93,7 @@ inline void powerUpdateState() {
 				}
 			}
 			break;
-		case POWER_STATE_CRASH:			
+		case POWER_STATE_CRASH:
 			// если получены результаты измерения
 			if ( power_meassure_enabled ) {
 				power_bad_voltage = power_voltage;
@@ -110,7 +109,7 @@ inline void powerUpdateState() {
 			// если настало время следующего измерения, выставляем флаг измерения и включаем трансформатор
 			} else if ( power_crash_meass_time >= settings_protect_repeat_time ) {
 				powerEnableSelf(true);
-				power_meassure_enabled = true;				
+				power_meassure_enabled = true;
 			}
 			break;
 		case POWER_STATE_CRASH_CONTROL:
@@ -138,7 +137,7 @@ inline void powerOnTimerTick() {
 }
 
 
-/** 
+/**
  * Возвращает true, если сейчас состояние аварии
  */
 inline bool powerisCrash() {

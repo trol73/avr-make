@@ -259,6 +259,7 @@ inline void startADC(uint8_t pin) {
 void main(void) {
 	wdt_enable(WDTO_250MS);
 	_delay_ms(50);
+
 	wdt_reset();
 	uart_init();
 

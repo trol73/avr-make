@@ -829,7 +829,7 @@ inline void drawLCD() {
 
 inline void setScreen(uint8_t index) {
 	screen = index;
-	lcd_update_flag = true;
+        lcd_update_flag = true;
 }
 
 

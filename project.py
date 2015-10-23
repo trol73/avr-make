@@ -4,8 +4,8 @@ __author__ = 'trol'
 
 import glob
 
-class Project:
 
+class Project:
     root_path = None
     _glob = {}
     _loc = {}
@@ -21,15 +21,21 @@ class Project:
         # build sources list
         src = self._loc['src']
         for pattern in src:
-            for f in glob.glob(self.root_path + '/' + pattern):
-                if not os.path.isdir(f):
-                    relative = f
-                    if relative.startswith(self.root_path):
-                        relative = relative[len(self.root_path)+1:]
-                    self._full_sources_list.add(relative)
+            self._load_dir(self.root_path + '/' + pattern)
+
+    def _load_dir(self, directory):
+        for f in glob.glob(directory):
+            if not os.path.isdir(f):
+                relative = f
+                if relative.startswith(self.root_path):
+                    relative = relative[len(self.root_path)+1:]
+                self._full_sources_list.add(relative)
 
     def get(self, name):
-        return self._loc[name]
+        if name in self._loc.keys():
+            return self._loc[name]
+        else:
+            return None
 
     def is_defined(self, name):
         if name in self._loc.keys():
@@ -57,4 +63,7 @@ class Project:
         return self.get('name')
 
     def is_debug(self):
-        return self.get('debug')
+        result = self.get('debug')
+        if result is None:
+            return False
+        return result

@@ -28,24 +28,24 @@ void save_eeprom() {
 inline void init_settings() {
 //#if LOAD_SETTINGS_FROM_EEPROM
 	load_eeprom();
-/*
-//#else
-	settings_time_correction_hs = 0;
-	settings_protect_u_min = PROTECT_U_MIN;
-	settings_protect_u_max = PROTECT_U_MAX;
-	settings_protect_repeat_time = PROTECT_REPEAT_TIME;
-	settings_protect_meass_time = PROTECT_MEASS_TIME;
-	stat_accum_cycles = 0;
-	stat_accum_charge_days = 0;
-	settings_accum_min_voltage = ACCUMULATOR_MIN_VOLTAGE;
-	settings_accum_min_load_voltage = ACCUMULATOR_MIN_LOAD_VOLTAGE;
-	accum_charge_time = ACCUMULATOR_CHARGE_HOURS;
-	time_day = 0;
+        /*
+        //#else
+                settings_time_correction_hs = 0;
+                settings_protect_u_min = PROTECT_U_MIN;
+                settings_protect_u_max = PROTECT_U_MAX;
+                settings_protect_repeat_time = PROTECT_REPEAT_TIME;
+                settings_protect_meass_time = PROTECT_MEASS_TIME;
+                stat_accum_cycles = 0;
+                stat_accum_charge_days = 0;
+                settings_accum_min_voltage = ACCUMULATOR_MIN_VOLTAGE;
+                settings_accum_min_load_voltage = ACCUMULATOR_MIN_LOAD_VOLTAGE;
+                accum_charge_time = ACCUMULATOR_CHARGE_HOURS;
+                time_day = 0;
 
-	save_eeprom();
-//#endif
-*/
-	if ( settings_time_correction_hs > 30000 ) {
+                save_eeprom();
+        //#endif
+        */
+        if ( settings_time_correction_hs > 30000 ) {
 		settings_time_correction_hs = 0;
 	}
 	if ( settings_protect_u_min > 3000 ) {

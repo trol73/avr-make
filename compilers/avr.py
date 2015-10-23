@@ -7,7 +7,6 @@ __author__ = 'trol'
 CROSSPACK_DEFAULT_LOCATION = '/usr/local/CrossPack-AVR/bin/'
 
 
-
 class AvrCompiler(Compiler):
     path_avr_gcc = None
     path_avr_objcopy = None
@@ -51,7 +50,7 @@ class AvrCompiler(Compiler):
         self.path_build = self.project.root_path + '/build'
 
     def run(self, argv):
-        print argv
+        print 'args = ', argv
         op_build = False
         op_upload = False
         op_clean = False
@@ -81,8 +80,6 @@ class AvrCompiler(Compiler):
         if op_upload:
             self.upload_firmware()
 
-
-
     def build(self):
         # compile files
         self.compiled_objects_path = []
@@ -101,6 +98,8 @@ class AvrCompiler(Compiler):
             os.mkdir(self.path_build)
         if ext == 'c':
             self.compile_c(source_file_name)
+        if ext == 's':
+            self.compile_s(source_file_name)            
 
     def compile_c(self, source_file_name):
         full_src = self.project.root_path + '/' + source_file_name
@@ -111,51 +110,74 @@ class AvrCompiler(Compiler):
         full_out = self.path_build + '/' + os.path.splitext(srcn)[0]
         utils.mkdir_for_file_out(full_out)
 
+        args = []
         arg_cpu = '-DF_CPU=' + str(self.project.get('frequency')) + ' -mmcu=' + self.project.get('mcu')
-        arg_compile = '-Os -g0 -c -std=gnu99'#'-funsigned-char -funsigned-bitfields -O1 -fpack-struct -fshort-enums -g2 -Wall -c -std=gnu99 -MD -MP -MF'
+        args.append('-x c -c -std=gnu99')
+        args.append('-funsigned-char -funsigned-bitfields -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -Wall')
+        args.append('-ffreestanding -mcall-prologues')
+
+        if self.project.is_debug():
+            args.append('-DDEBUG -O1 -g2')
+        else:
+            args.append('-DNDEBUG -Os -g0')
+
         user_options = self.project.get('compiler_options')
-        if user_options is not None:
-            for option in user_options:
-                arg_compile += ' ' + option
-        cmd = self.path_avr_gcc + ' ' + arg_compile + ' ' + arg_cpu + ' ' + self.get_defines_args() + full_src + ' -o ' + full_out + '.o'
+        cmd = self.string(self.path_avr_gcc, args, arg_cpu, user_options, self.get_defines_args(), full_src, '-o ' + full_out + '.o')
 
         os.chdir(os.path.dirname(full_src))
         utils.remove_file_if_exist(full_out + '.o')
         self.execute(cmd)
         self.compiled_objects_path.append(full_out + '.o')
 
+    def compile_s(self, source_file_name):
+        full_src = self.project.root_path + '/' + source_file_name
+        if source_file_name.startswith('src/'):
+            srcn = source_file_name[len('src/'):]
+        else:
+            srcn = source_file_name
+        full_out = self.path_build + '/' + os.path.splitext(srcn)[0]
+        utils.mkdir_for_file_out(full_out)
+
+        arg_cpu = '-DF_CPU=' + str(self.project.get('frequency')) + ' -mmcu=' + self.project.get('mcu')
+        arg_compile = '-Wa,-gdwarf2 -x assembler-with-cpp -c -mrelax'
+
+        user_options = self.project.get('compiler_options')
+        cmd = self.string(self.path_avr_gcc, arg_compile, arg_cpu, user_options, self.get_defines_args(), '-o ' + full_out + '.o', full_src)
+        os.chdir(os.path.dirname(full_src))
+        utils.remove_file_if_exist(full_out + '.o')
+        self.execute(cmd)
+        self.compiled_objects_path.append(full_out + '.o')
+        
     def link_project(self, project):
-        elf_name = self.path_build + '/' + self.project.get_name() + '.elf'
+        out_name = self.path_build + '/' + self.project.get_name()
+        elf_name = out_name + '.elf'
+        map_name = out_name + '.map'
         objects = ''
         for obj in self.compiled_objects_path:
             objects += obj + ' '
         arg_mcu = '-mmcu=' + project.get('mcu')
         user_options = self.project.get('linker_options')
-        user = ''
-        if user_options is not None:
-            for option in user_options:
-                user += ' ' + option
-
-        cmd = self.path_avr_gcc + user + ' -o ' + elf_name + ' ' + objects + arg_mcu
+        options = '-Wl,--relax -Wl,--start-group -Wl,-lm  -Wl,--end-group -Wl,--gc-sections -Wl,-Map="' + map_name + '" '
+        cmd = self.string(self.path_avr_gcc, user_options, ' -o ' + elf_name, objects, options, arg_mcu)
         utils.remove_file_if_exist(elf_name)
         self.execute(cmd)
-        #avr-gcc.exe" -o MoodLamp.elf  MoodLamp.o   -Wl,-Map="MoodLamp.map" -Wl,-lm   -mmcu=attiny13
 
     def make_hex(self):
-        params = '-j .text -j .data -O ihex'
-        cmd = self.path_avr_objcopy + ' ' + params + ' ' + self.get_elf_filepath() + ' ' + self.get_out_filepath('.hex')
+        params = '-O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures'
+        cmd = self.string(self.path_avr_objcopy, params, self.get_elf_filepath(), self.get_out_filepath('.hex'))
+        #avr-objcopy -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures  "GccApplication1.elf" "GccApplication1.hex"
         utils.remove_file_if_exist(self.get_out_filepath('.hex'))
         self.execute(cmd)
 
     def make_eep(self):
         params = '-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0  --no-change-warnings'
-        cmd = self.path_avr_objcopy + ' ' + params + ' ' + self.get_elf_filepath() + ' ' + self.get_out_filepath('.eep')
+        cmd = self.string(self.path_avr_objcopy, params, self.get_elf_filepath(), self.get_out_filepath('.eep'))
         utils.remove_file_if_exist(self.get_out_filepath('.eep'))
         self.execute(cmd)
 
     def make_lst(self):
-        cmd = self.path_avr_objdump + ' -h -S "' + self.get_elf_filepath() + '" > "' + self.get_out_filepath('.lst') + '"'
-        utils.remove_file_if_exist(self.get_out_filepath('.lst'))
+        cmd = self.string(self.path_avr_objdump, '-h -S "' + self.get_elf_filepath() + '" > "' + self.get_out_filepath('.lss') + '"')
+        utils.remove_file_if_exist(self.get_out_filepath('.lss'))
         self.execute(cmd)
 
     def upload_firmware(self):
@@ -183,7 +205,8 @@ class AvrCompiler(Compiler):
         self.execute(cmd)
 
     def clean(self):
-        utils.remove_file_if_exist(self.get_out_filepath('.lst'))
+        utils.remove_file_if_exist(self.get_out_filepath('.lss'))
+        utils.remove_file_if_exist(self.get_out_filepath('.map'))
         utils.remove_file_if_exist(self.get_out_filepath('.hex'))
         utils.remove_file_if_exist(self.get_out_filepath('.eep'))
         utils.remove_file_if_exist(self.get_out_filepath('.elf'))
@@ -220,35 +243,3 @@ class AvrCompiler(Compiler):
             result += '-D' + d + ' '
         return result
 
-
-
-
-# -c -g -Os -w -ffunction-sections -fdata-sections -MMD
-
-
-
-
-#    -Idir include search directory
-#    -c compiles source files without linking.
-#    -g generates debug information to be used by GDB debugger.
-#             -g0	no debug information
-#             -g1	minimal debug information
-#             -g	default debug information
-#             -g3	maximal debug information
-
-# -ffunction-sections
-# -fdata-sections
-# Place each function or data item into its own section in the output file if the target supports arbitrary sections. The name of the function or the name of the data item determines the section's name in the output file.
-# Use these options on systems where the linker can perform optimizations to improve locality of reference in the instruction space. Most systems using the ELF object format and SPARC processors running Solaris 2 have linkers with such optimizations. AIX may have these optimizations in the future.
-#
-# Only use these options when there are significant benefits from doing so. When you specify these options, the assembler and linker will create larger object and executable files and will also be slower. You will not be able to use gprof on all systems if you specify this option and you may have problems with debugging if you specify both this option and -g.
-
-
-#		"C:\Program Files\Atmel\AVR Studio 5.1\extensions\Atmel\AVRGCC\3.3.1.27\AVRToolchain\bin\avr-gcc.exe"
-#  -funsigned-char -funsigned-bitfields -O1 -fpack-struct -fshort-enums -g2 -Wall -c -std=gnu99 -MD -MP -MF "MoodLamp.d" -MT"MoodLamp.d"
-#  -mmcu=attiny13  -o"MoodLamp.o" ".././MoodLamp.c"
-
-# def compile(filename, ext, project):
-#     if ext == 'c':
-#         return path_avr_gcc + '-Wall -Os -DF_CPU=' + project.get('frequency') + ' -mmcu=' + project.get(
-#             'mcu') + ' -c ' + filename + ' -o ' + filename + '.o'
