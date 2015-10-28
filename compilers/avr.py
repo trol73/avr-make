@@ -55,32 +55,26 @@ class AvrCompiler(Compiler):
         return self.quote(result)
 
     def run(self, argv):
-        #print 'args = ', argv
-        op_build = False
         op_upload = False
         op_clean = False
-        debug_build = None
-        if 'build' in argv:
-            op_build = True
-        if 'clean' in argv:
-            op_clean = True
-        if 'release' in argv:
-            if debug_build:
-                self.error("wrong params - 'debug' and 'release' defined simultaneously")
-            op_build = True
-            debug_build = False
-        if 'debug' in argv:
-            if not debug_build:
-                self.error("wrong params - 'debug' and 'release' defined simultaneously")
-            op_build = True
-            debug_build = True
-        if 'upload' in argv:
-            op_upload = True
-        if len(argv) == 0:
-            op_build = True
+
+        for arg in argv:
+            if arg == 'clean':
+                op_clean = True
+            elif arg == 'upload':
+                op_upload = True
+            elif arg == 'all':
+                for conf in self.project.get_configurations():
+                    self.configurations.add(conf)
+            else:
+                self.configurations.add(arg)
+        if len(self.configurations) == 0:
+            self.configurations.add(None)
+
         if op_clean:
             self.clean()
-        if op_build:
+        for config in self.configurations:
+            self.project.current_configuration = config
             self.build()
         if op_upload:
             self.upload_firmware()
@@ -237,7 +231,7 @@ class AvrCompiler(Compiler):
             utils.rmdir_for_file_out(full_out)
 
     def show_size(self):
-        cmd = self.path_avr_size + ' --format=avr --mcu=' + self.project.get('mcu') + ' ' + self.get_elf_filepath()
+        cmd = self.string(self.path_avr_size, '--format=avr --mcu=' + self.project.get('mcu'), self.get_elf_filepath())
         self.execute(cmd)
 
     def get_out_filepath(self, ext):

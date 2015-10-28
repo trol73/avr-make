@@ -15,7 +15,20 @@ programmer = 'arduino'
 
 defines = []
 
-compiler_options = []
+compiler_options = ['-Os']
 
-linker_options = []
+linker_options = ['-Wl,--relax']
 
+
+
+configurations = {
+	"debug": {
+		"name": "lcd_test_debug",
+		"defines": ['DEBUG_MACRO']
+	},
+	"release": {
+		"name": "lcd_test_release",
+		"defines": ['RELEASE_MACRO']
+	}
+   
+}

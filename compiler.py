@@ -8,9 +8,11 @@ __author__ = 'trol'
 class Compiler:
     project = None
     verbose_mode = False
+    configurations = []
 
     def __init__(self, project):
         self.project = project
+        self.configurations = set([])
 
     def init(self):
         pass
@@ -31,7 +33,6 @@ class Compiler:
         if self.verbose_mode:
             print cmd
         rc = os.system(cmd)
-        print rc, cmd
         if rc != 0:
             quit(-1)
 
