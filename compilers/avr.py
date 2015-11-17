@@ -75,6 +75,7 @@ class AvrCompiler(Compiler):
             self.clean()
         for config in self.configurations:
             self.project.current_configuration = config
+            print '--[' + config + ']--'
             self.build()
         if op_upload:
             self.upload_firmware()
