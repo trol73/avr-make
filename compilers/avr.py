@@ -75,7 +75,8 @@ class AvrCompiler(Compiler):
             self.clean()
         for config in self.configurations:
             self.project.current_configuration = config
-            print '--[' + config + ']--'
+            if config is not None:
+                print '--[' + config + ']--'
             self.build()
         if op_upload:
             self.upload_firmware()
@@ -99,7 +100,7 @@ class AvrCompiler(Compiler):
         if ext == 'c':
             self.compile_c(source_file_name)
         if ext == 's':
-            self.compile_s(source_file_name)            
+            self.compile_s(source_file_name)
 
     def compile_c(self, source_file_name):
         full_src = self.project.root_path + '/' + source_file_name
@@ -147,7 +148,7 @@ class AvrCompiler(Compiler):
         utils.remove_file_if_exist(full_out + '.o')
         self.execute(cmd)
         self.compiled_objects_path.append(full_out + '.o')
-        
+
     def link_project(self, project):
         out_name = self.path_build + '/' + self.project.get_name()
         elf_name = out_name + '.elf'
@@ -168,7 +169,7 @@ class AvrCompiler(Compiler):
     def make_hex(self):
         params = '-O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures'
         cmd = self.string(self.path_avr_objcopy, params, self.get_elf_filepath(), self.get_out_filepath('.hex'))
-        #avr-objcopy -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures  "GccApplication1.elf" "GccApplication1.hex"
+        # avr-objcopy -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures  "GccApplication1.elf" "GccApplication1.hex"
         utils.remove_file_if_exist(self.get_out_filepath('.hex'))
         self.execute(cmd)
 
@@ -249,4 +250,3 @@ class AvrCompiler(Compiler):
         for d in defs:
             result += '-D' + d + ' '
         return result
-
