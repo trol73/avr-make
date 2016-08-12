@@ -123,6 +123,7 @@ class AvrCompiler(Compiler):
         self.show_size()
 
     def compile(self, source_file_name, ext):
+        #print 'Compile', source_file_name
         # prepare build directory
         if not os.path.exists(self.path_build):
             os.mkdir(self.path_build)
@@ -158,7 +159,9 @@ class AvrCompiler(Compiler):
 
         os.chdir(os.path.dirname(full_src))
         utils.remove_file_if_exist(full_out + '.o')
+
         self.execute(cmd)
+
         self.compiled_objects_path.append(full_out + '.o')
 
     def compile_s(self, source_file_name):
@@ -328,9 +331,12 @@ class AvrCompiler(Compiler):
 
     def get_defines_args(self):
         defs = self.project.get('defines')
-        if defs is None:
-            return ''
         result = ''
-        for d in defs:
-            result += '-D' + d + ' '
+        if defs is not None:
+            for d in defs:
+                result += '-D' + d + ' '
+        defs_config = self.project.get('define')
+        if defs_config is not None:
+            for d in defs_config:
+                result += '-D' + d + ' '
         return result

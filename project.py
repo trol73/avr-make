@@ -40,6 +40,7 @@ class Project:
                 self._full_sources_list.add(relative)
 
     def get(self, name):
+#        print '\nget  name', name
         result = None
         if self.current_configuration is not None and 'configurations' in self._loc.keys():
             configurations = self._loc['configurations']
@@ -47,7 +48,7 @@ class Project:
                 config = configurations[self.current_configuration]
                 if name in config.keys():
                     result = config[name]
-        if result is not None and type(result) is not list:
+        if result is not None: # and type(result) is not list:
             return result
 
         if name in self._loc.keys():

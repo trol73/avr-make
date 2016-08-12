@@ -35,6 +35,8 @@ class Compiler:
             print cmd
         rc = os.system(cmd)
         if rc != 0:
+            print 'Exit code is', rc
+            print cmd
             quit(-1)
 
     @staticmethod
