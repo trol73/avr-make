@@ -63,3 +63,7 @@ def remove_file_if_exist(filename):
 
 def is_windows():
     return any(platform.win32_ver())
+
+
+def parent_path(s):
+    return os.path.split(os.path.abspath(s))[0]

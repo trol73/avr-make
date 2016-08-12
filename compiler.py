@@ -8,6 +8,7 @@ __author__ = 'trol'
 class Compiler:
     project = None
     verbose_mode = False
+    builder_root = None
     configurations = []
 
     def __init__(self, project):

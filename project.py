@@ -2,6 +2,8 @@
 import os
 import glob
 
+from compiler import Compiler
+
 __author__ = 'trol'
 
 
@@ -18,6 +20,11 @@ class Project:
     def load(self, file_name):
         # load project file
         execfile(self.root_path + '/' + file_name, self._glob, self._loc)
+
+        if self.get('src') is None or len(self.get('src')) == 0:
+            Compiler.error("Sources doesn't defined. Add 'src' parameter")
+        if self.get('name') is None or len(self.get('name')) == 0:
+            Compiler.error("Project name doesn't defined. Add 'name' parameter")
 
         # build sources list
         src = self._loc['src']

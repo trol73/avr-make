@@ -11,34 +11,61 @@ CROSSPACK_DEFAULT_LOCATION = '/usr/local/CrossPack-AVR/bin/'
 
 class AvrCompiler(Compiler):
     path_avr_gcc = None
+    path_avr_as = None
+    path_avr_ld = None
     path_avr_objcopy = None
     path_avr_objdump = None
     path_avr_size = None
     path_avrdude = None
     path_build = None
+    path_avra = None
     avrgcc_home = None
+    avra_home = None
+
 
     compiled_objects_path = []
+    is_assembler_single_file_project = None
 
-    def init(self):
+    def init(self, builder_root):
         if 'AVR_GCC_HOME' in os.environ.keys():
             self.avrgcc_home = os.environ['AVR_GCC_HOME']
         else:
             self.avrgcc_home = None
+        if 'AVRA_HOME' in os.environ.keys():
+            self.avra_home = os.environ['AVRA_HOME']
+        else:
+            self.avra_home = None
         if self.avrgcc_home is not None:
             if len(self.avrgcc_home.strip()) == 0:
                 self.avrgcc_home = None
             else:
                 if self.avrgcc_home[-1:] != '/' and self.avrgcc_home[-1:] != '\\':
                     self.avrgcc_home += '/'
+        if self.avra_home is not None:
+            if len(self.avra_home.strip()) == 0:
+                self.avra_home = None
+            else:
+                if self.avra_home[-1:] != '/' and self.avrgcc_home[-1:] != '\\':
+                    self.avra_home += '/'
 
         self.path_avr_gcc = self._find_util('avr-gcc')
+        self.path_avr_as = self._find_util('avr-as')
+        self.path_avr_ld = self._find_util('avr-ld')
         self.path_avr_objcopy = self._find_util('avr-objcopy')
         self.path_avr_objdump = self._find_util('avr-objdump')
         self.path_avr_size = self._find_util('avr-size')
         self.path_avrdude = self._find_util('avrdude')
+        self.path_avra = self._find_util('avra')
+        if self.path_avra is None:
+            self.path_avra = self._find_util('avrasm32')
 
         self.path_build = self.project.root_path + '/build'
+
+        if len(self.project.get_sources()) == 1 and next(iter(self.project.get_sources())).lower().endswith('.asm'):
+            self.is_assembler_single_file_project = True
+        else:
+            self.is_assembler_single_file_project = False
+        self.builder_root = builder_root
 
     def _find_util(self, exe_name):
         # try environment location
@@ -85,6 +112,8 @@ class AvrCompiler(Compiler):
         # compile files
         self.compiled_objects_path = []
         Compiler.build(self)
+        if self.is_assembler_single_file_project:
+            return
         # link files
         self.link_project(self.project)
         # make hex and eep
@@ -99,8 +128,10 @@ class AvrCompiler(Compiler):
             os.mkdir(self.path_build)
         if ext == 'c':
             self.compile_c(source_file_name)
-        if ext == 's':
+        elif ext == 's':
             self.compile_s(source_file_name)
+        elif ext == 'asm':
+            self.compile_asm(source_file_name)
 
     def compile_c(self, source_file_name):
         full_src = self.project.root_path + '/' + source_file_name
@@ -148,6 +179,59 @@ class AvrCompiler(Compiler):
         utils.remove_file_if_exist(full_out + '.o')
         self.execute(cmd)
         self.compiled_objects_path.append(full_out + '.o')
+
+    def compile_asm(self, source_file_name):
+        full_src = self.project.root_path + '/' + source_file_name
+        include_path = self.builder_root + '/asm/include'
+        if source_file_name.startswith('src/'):
+            srcn = source_file_name[len('src/'):]
+        else:
+            srcn = source_file_name
+        full_out = self.path_build + '/' + os.path.splitext(srcn)[0]
+        utils.mkdir_for_file_out(full_out)
+
+        cmd = self.string(self.path_avra, '-fI', '-o', self.get_out_filepath('.hex'), #'-l', self.get_out_filepath('.lst'),
+                          '-I', include_path, full_src)
+        print cmd
+        self.execute(cmd)
+        # avra -fI -o out.hex - l out.lst - I / Users / trol / Bin / avr - builder / asm / include / firmware.asm
+
+    # def compile_asm(self, source_file_name):
+    #     print utils.parent_path(utils.parent_path(self.path_avr_as))
+    #     include_path = utils.parent_path(utils.parent_path(self.path_avr_as)) + '/avr/include'
+    #     #include_path = self.builder_root + '/asm/include'
+    #     if not os.path.isdir(include_path):
+    #         include_path = None
+    #     full_src = self.project.root_path + '/' + source_file_name
+    #     if source_file_name.startswith('src/'):
+    #         srcn = source_file_name[len('src/'):]
+    #     else:
+    #         srcn = source_file_name
+    #     full_out = self.path_build + '/' + os.path.splitext(srcn)[0]
+    #     utils.mkdir_for_file_out(full_out)
+    #     arg_cpu = '-mmcu=' + self.project.get('mcu')
+    #     arg_compile = ''
+    #     if not include_path is None:
+    #         arg_compile = '-I ' + include_path
+    #     user_options = self.project.get('compiler_options')
+    #
+    #     # compile
+    #     cmd = self.string(self.path_avr_as, arg_compile, arg_cpu, user_options, self.get_defines_args(), '-o ' + full_out + '.o', full_src)
+    #     os.chdir(os.path.dirname(full_src))
+    #     utils.remove_file_if_exist(full_out + '.o')
+    #     self.execute(cmd)
+    #     if self.is_assembler_single_file_project:
+    #         # make elf
+    #         cmd = self.string(self.path_avr_ld, '-o', self.get_out_filepath('.elf'), full_out + '.o')
+    #         self.execute(cmd)
+    #         # make hex
+    #         cmd = self.string(self.path_avr_objcopy, '--output-target=ihex', self.get_out_filepath('.elf'), self.get_out_filepath('.hex'))
+    #         utils.remove_file_if_exist(self.get_out_filepath('.hex'))
+    #         self.execute(cmd)
+    #         # make lss
+    #         self.make_lst()
+    #         # show size
+    #         self.show_size()
 
     def link_project(self, project):
         out_name = self.path_build + '/' + self.project.get_name()
