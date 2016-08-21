@@ -18,11 +18,7 @@ def is_exe(fpath):
     return is_windows() and (os.path.exists(fpath) or os.path.exists(fpath + '.exe'))
 
 
-def which(program):
-    """
-    :param program: OS command
-    :return: full file path or None
-    """
+def _which(program):
     fpath, fname = os.path.split(program)
     if fpath:
         if is_exe(program):
@@ -33,7 +29,21 @@ def which(program):
             exe_file = os.path.join(path, program)
             if is_exe(exe_file):
                 return exe_file
-    where_result = os.popen('where ' + program).read().split('\n')
+    return None
+
+
+def which(program):
+    """
+    :param program: OS command
+    :return: full file path or None
+    """
+    result = _which(program)
+    if result is not None:
+        return result
+    if _which('where') is not None:
+        where_result = os.popen('where ' + program).read().split('\n')
+    else:
+        where_result = os.popen('whereis ' + program).read().split('\n')
     for s in where_result:
         st = s.strip()
         if len(st) == 0:
