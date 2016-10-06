@@ -7,6 +7,7 @@ import utils
 from compilers.avr import AvrCompiler
 from compilers.gcc import GccCompiler
 from project import Project
+from compiler import Compiler
 
 __author__ = 'trol'
 
@@ -27,6 +28,8 @@ if not utils.is_windows():
 
 prj = Project(project_root)
 
+if not os.path.exists(MAKE_FILE_NAME):
+    Compiler.error(MAKE_FILE_NAME + ' not found')
 prj.load(MAKE_FILE_NAME)
 
 # print prj.get('name')

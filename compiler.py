@@ -48,6 +48,14 @@ class Compiler:
         quit(-1)
 
     @staticmethod
+    def warning(msg):
+        if sys.stdout.isatty():
+            print '\033[1;35m' + 'error: ' + str(msg) + '\033[1;m'
+        else:
+            print 'WARNING: ' + str(msg)
+
+
+    @staticmethod
     def verbose(msg):
         if sys.stdout.isatty():
             print '\033[1;30m' + str(msg) + '\033[1;m'
@@ -93,5 +101,5 @@ class Compiler:
             return '"' + path + '"'
         return path
 
-# all colors https://www.siafoo.net/snippet/88
+# all colors http://www.siafoo.net/snippet/88
 

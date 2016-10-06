@@ -29,6 +29,12 @@ class AvrCompiler(Compiler):
     def init(self, builder_root):
         if 'AVR_GCC_HOME' in os.environ.keys():
             self.avrgcc_home = os.environ['AVR_GCC_HOME']
+            if self.avrgcc_home is not None:
+                self.avrgcc_home = self.avrgcc_home.strip();
+                if len(self.avrgcc_home) > 1 and self.avrgcc_home[0] == '"' and self.avrgcc_home[-1] == '"':
+                    self.avrgcc_home = self.avrgcc_home[1:-1]
+                if not os.path.exists(self.avrgcc_home):
+                    self.warning('wrong AVR_GCC_HOME value: ' + self.avrgcc_home)
         else:
             self.avrgcc_home = None
         if 'AVRA_HOME' in os.environ.keys():
@@ -135,6 +141,8 @@ class AvrCompiler(Compiler):
             self.compile_asm(source_file_name)
 
     def compile_c(self, source_file_name):
+        if self.path_avr_gcc is None:
+            self.error('AVR-GCC not found!')
         full_src = self.project.root_path + '/' + source_file_name
         if source_file_name.startswith('src/'):
             srcn = source_file_name[len('src/'):]
@@ -165,6 +173,8 @@ class AvrCompiler(Compiler):
         self.compiled_objects_path.append(full_out + '.o')
 
     def compile_s(self, source_file_name):
+        if self.path_avr_gcc is None:
+            self.error('AVR-GCC not found!')
         full_src = self.project.root_path + '/' + source_file_name
         if source_file_name.startswith('src/'):
             srcn = source_file_name[len('src/'):]
@@ -184,6 +194,8 @@ class AvrCompiler(Compiler):
         self.compiled_objects_path.append(full_out + '.o')
 
     def compile_asm(self, source_file_name):
+        if self.path_avra is None:
+            self.error('AVRA not found!')
         full_src = self.project.root_path + '/' + source_file_name
         include_path = self.builder_root + '/asm/include'
         if source_file_name.startswith('src/'):
@@ -254,6 +266,8 @@ class AvrCompiler(Compiler):
         self.execute(cmd)
 
     def make_hex(self):
+        if self.path_avr_objcopy is None:
+            self.error('AVR-OBJCOPY not found!')
         params = '-O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures'
         cmd = self.string(self.path_avr_objcopy, params, self.get_elf_filepath(), self.get_out_filepath('.hex'))
         # avr-objcopy -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures  "GccApplication1.elf" "GccApplication1.hex"
@@ -261,12 +275,16 @@ class AvrCompiler(Compiler):
         self.execute(cmd)
 
     def make_eep(self):
+        if self.path_avr_objcopy is None:
+            self.error('AVR-OBJCOPY not found!')
         params = '-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0  --no-change-warnings'
         cmd = self.string(self.path_avr_objcopy, params, self.get_elf_filepath(), self.get_out_filepath('.eep'))
         utils.remove_file_if_exist(self.get_out_filepath('.eep'))
         self.execute(cmd)
 
     def make_lst(self):
+        if self.path_avr_objdump is None:
+            self.error('AVR-OBJDUMP not found!')
         if utils.is_windows():
             args = '-h -S ' + self.get_elf_filepath() + ' > ' + self.get_out_filepath('.lss')
         else:
