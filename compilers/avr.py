@@ -22,7 +22,6 @@ class AvrCompiler(Compiler):
     avrgcc_home = None
     avra_home = None
 
-
     compiled_objects_path = []
     is_assembler_single_file_project = None
 
@@ -148,6 +147,7 @@ class AvrCompiler(Compiler):
             srcn = source_file_name[len('src/'):]
         else:
             srcn = source_file_name
+
         full_out = self.path_build + '/' + os.path.splitext(srcn)[0]
         utils.mkdir_for_file_out(full_out)
 
@@ -156,6 +156,8 @@ class AvrCompiler(Compiler):
         args.append('-x c -c -std=gnu99')
         args.append('-funsigned-char -funsigned-bitfields -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -Wall')
         args.append('-ffreestanding -mcall-prologues')
+        if source_file_name.startswith('src/'):
+            args.append('-iquote  "' + self.project.root_path + '/src"')
 
         if self.project.is_debug():
             args.append('-DDEBUG -O1 -g2')

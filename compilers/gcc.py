@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
 from compiler import Compiler
 import utils
 
@@ -55,6 +54,8 @@ class GccCompiler(Compiler):
             s += ' $(pkg-config --cflags)'
         else:
             s += ' $(pkg-config --cflags --libs ' + libs + ')'
+        s += ' -iquote  "' + self.project.root_path + '/src"'
+
         self.execute(s)
 
     def compile(self, source_file_name, ext):

@@ -15,7 +15,7 @@ class Compiler:
         self.project = project
         self.configurations = set([])
 
-    def init(self):
+    def init(self, builder_root):
         pass
 
     def run(self, argv):
