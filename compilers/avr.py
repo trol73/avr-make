@@ -78,12 +78,13 @@ class AvrCompiler(Compiler):
             result = self.avrgcc_home + exe_name
             if utils.is_windows():
                 result += '.exe'
-        # try CrossPack-AVR default location
-        elif utils.is_exe(CROSSPACK_DEFAULT_LOCATION + exe_name):
-            result = CROSSPACK_DEFAULT_LOCATION + exe_name
         # try to find
         else:
             result = utils.which(exe_name)
+            # try CrossPack-AVR default location
+            if result is None and utils.is_exe(CROSSPACK_DEFAULT_LOCATION + exe_name):
+                result = CROSSPACK_DEFAULT_LOCATION + exe_name
+
         return self.quote(result)
 
     def run(self, argv):
