@@ -144,12 +144,15 @@ class AvrCompiler(Compiler):
         if self.path_avr_gcc is None:
             self.error('AVR-GCC not found!')
         full_src = self.project.root_path + '/' + source_file_name
+        full_src = os.path.abspath(full_src)
         if source_file_name.startswith('src/'):
             srcn = source_file_name[len('src/'):]
         else:
             srcn = source_file_name
 
         full_out = self.path_build + '/' + os.path.splitext(srcn)[0]
+        full_out = full_out.replace('/..', '')
+
         utils.mkdir_for_file_out(full_out)
 
         args = []
