@@ -123,13 +123,13 @@ class AvrCompiler(Compiler):
         # link files
         self.link_project(self.project)
         # make hex and eep
-        self.make_hex()
+        self.make_hex(self.project)
         self.make_eep()
         self.make_lst()
         self.show_size()
 
     def compile(self, source_file_name, ext):
-        #print 'Compile', source_file_name
+        # print 'Compile', source_file_name
         # prepare build directory
         if not os.path.exists(self.path_build):
             os.mkdir(self.path_build)
@@ -158,7 +158,8 @@ class AvrCompiler(Compiler):
         args = []
         arg_cpu = '-DF_CPU=' + str(self.project.get('frequency')) + ' -mmcu=' + self.project.get('mcu')
         args.append('-x c -c -std=gnu99')
-        args.append('-funsigned-char -funsigned-bitfields -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -Wall')
+        args.append(
+            '-funsigned-char -funsigned-bitfields -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -Wall')
         args.append('-ffreestanding -mcall-prologues')
         if source_file_name.startswith('src/'):
             args.append('-iquote  "' + self.project.root_path + '/src"')
@@ -169,7 +170,8 @@ class AvrCompiler(Compiler):
             args.append('-DNDEBUG -Os -g0')
 
         user_options = self.project.get('compiler_options')
-        cmd = self.string(self.path_avr_gcc, args, arg_cpu, user_options, self.get_defines_args(), full_src, '-o ' + full_out + '.o')
+        cmd = self.string(self.path_avr_gcc, args, arg_cpu, user_options, self.get_defines_args(), full_src,
+                          '-o ' + full_out + '.o')
 
         os.chdir(os.path.dirname(full_src))
         utils.remove_file_if_exist(full_out + '.o')
@@ -193,7 +195,8 @@ class AvrCompiler(Compiler):
         arg_compile = '-Wa,-gdwarf2 -x assembler-with-cpp -c -mrelax'
 
         user_options = self.project.get('compiler_options')
-        cmd = self.string(self.path_avr_gcc, arg_compile, arg_cpu, user_options, self.get_defines_args(), '-o ' + full_out + '.o', full_src)
+        cmd = self.string(self.path_avr_gcc, arg_compile, arg_cpu, user_options, self.get_defines_args(),
+                          '-o ' + full_out + '.o', full_src)
         os.chdir(os.path.dirname(full_src))
         utils.remove_file_if_exist(full_out + '.o')
         self.execute(cmd)
@@ -211,7 +214,8 @@ class AvrCompiler(Compiler):
         full_out = self.path_build + '/' + os.path.splitext(srcn)[0]
         utils.mkdir_for_file_out(full_out)
 
-        cmd = self.string(self.path_avra, '-fI', '-o', self.get_out_filepath('.hex'), #'-l', self.get_out_filepath('.lst'),
+        cmd = self.string(self.path_avra, '-fI', '-o', self.get_out_filepath('.hex'),
+                          # '-l', self.get_out_filepath('.lst'),
                           '-I', include_path, full_src)
         print cmd
         self.execute(cmd)
@@ -271,7 +275,7 @@ class AvrCompiler(Compiler):
         utils.remove_file_if_exist(elf_name)
         self.execute(cmd)
 
-    def make_hex(self):
+    def make_hex(self, project):
         if self.path_avr_objcopy is None:
             self.error('AVR-OBJCOPY not found!')
         params = '-O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures'
@@ -279,6 +283,26 @@ class AvrCompiler(Compiler):
         # avr-objcopy -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures  "GccApplication1.elf" "GccApplication1.hex"
         utils.remove_file_if_exist(self.get_out_filepath('.hex'))
         self.execute(cmd)
+        bootloader = project.get('bootloader_hex')
+        if bootloader is not None:
+            os.chdir(project.root_path)
+            self.inject_bootloader(self.get_out_filepath('.hex'), bootloader)
+
+    @staticmethod
+    def inject_bootloader(firmware, bootloader):
+        os.system('pwd')
+        with open(bootloader, 'r') as f:
+            bootloader_data = f.read()
+        firmware_data = ''
+        with open(firmware, 'r') as f:
+            for s in f:
+                if not s.startswith(':00000001FF'):
+                    firmware_data += s
+                else:
+                    firmware_data += bootloader_data
+        with open(firmware, "w") as f:
+            f.write(firmware_data)
+        print 'bootloader injected'
 
     def make_eep(self):
         if self.path_avr_objcopy is None:
