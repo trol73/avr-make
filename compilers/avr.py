@@ -189,15 +189,23 @@ class AvrCompiler(Compiler):
         else:
             srcn = source_file_name
         full_out = self.path_build + '/' + os.path.splitext(srcn)[0]
+        use_asm_ext = self.project.get('asm_ext') is True
         utils.mkdir_for_file_out(full_out)
+        if use_asm_ext:
+            avr_ext_path = self.builder_root + '/tools/avr-asm-ext.jar'
+            ext_out = full_out + '.s'
+            self.execute('java -jar ' + avr_ext_path + ' ' + full_src + ' ' + ext_out + '.asmext')
+            full_src = ext_out + '.asmext'
+
+        os.chdir(os.path.dirname(full_src))
 
         arg_cpu = '-DF_CPU=' + str(self.project.get('frequency')) + ' -mmcu=' + self.project.get('mcu')
         arg_compile = '-Wa,-gdwarf2 -x assembler-with-cpp -c -mrelax'
+        arg_include = '-I ' + self.project.root_path + '/src'
 
         user_options = self.project.get('compiler_options')
-        cmd = self.string(self.path_avr_gcc, arg_compile, arg_cpu, user_options, self.get_defines_args(),
+        cmd = self.string(self.path_avr_gcc, arg_compile, arg_cpu, arg_include, user_options, self.get_defines_args(),
                           '-o ' + full_out + '.o', full_src)
-        os.chdir(os.path.dirname(full_src))
         utils.remove_file_if_exist(full_out + '.o')
         self.execute(cmd)
         self.compiled_objects_path.append(full_out + '.o')
