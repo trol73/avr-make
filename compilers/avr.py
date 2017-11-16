@@ -194,8 +194,9 @@ class AvrCompiler(Compiler):
         if use_asm_ext:
             avr_ext_path = self.builder_root + '/tools/avr-asm-ext.jar'
             ext_out = full_out + '.s'
-            self.execute('java -jar ' + avr_ext_path + ' ' + full_src + ' ' + ext_out + '.asmext')
-            full_src = ext_out + '.asmext'
+            processed_out = ext_out[:-2] + '.asmext.s'
+            self.execute('java -jar ' + avr_ext_path + ' ' + full_src + ' ' + processed_out)
+            full_src = processed_out
 
         os.chdir(os.path.dirname(full_src))
 
