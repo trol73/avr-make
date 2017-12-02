@@ -8,6 +8,7 @@ __author__ = 'trol'
 
 class GccCompiler(Compiler):
     files_to_compile = []
+    cmd = None
 
     def init(self, builder_root):
         pass
@@ -41,7 +42,8 @@ class GccCompiler(Compiler):
 
     def build(self):
         Compiler.build(self)
-        s = 'gcc -o ' + self.executable_file_name()
+        #s = 'gcc -o ' + self.executable_file_name()
+        s = self.cmd + ' -o ' + self.executable_file_name()
         for name in self.files_to_compile:
             s += ' ' + name
         includes = self.project.get('include')

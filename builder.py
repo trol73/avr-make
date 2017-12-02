@@ -40,6 +40,10 @@ if compiler_name is None or compiler_name == 'avr':
     compiler = AvrCompiler(prj)
 elif compiler_name == 'gcc':
     compiler = GccCompiler(prj)
+    compiler.cmd = 'gcc'
+elif compiler_name == 'g++':
+    compiler = GccCompiler(prj)
+    compiler.cmd = 'g++'
 
 compiler.init(builder_root)
 compiler.run(sys.argv[1:])
