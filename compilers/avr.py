@@ -189,8 +189,8 @@ class AvrCompiler(Compiler):
         else:
             srcn = source_file_name
         full_out = self.path_build + '/' + os.path.splitext(srcn)[0]
-        use_asm_ext = self.project.get('asm_ext') is True
         utils.mkdir_for_file_out(full_out)
+        use_asm_ext = self.project.get('asm_ext') is True
         if use_asm_ext:
             avr_ext_path = self.builder_root + '/tools/avr-asm-ext.jar'
             ext_out = full_out + '.s'
@@ -222,11 +222,18 @@ class AvrCompiler(Compiler):
             srcn = source_file_name
         full_out = self.path_build + '/' + os.path.splitext(srcn)[0]
         utils.mkdir_for_file_out(full_out)
+        use_asm_ext = self.project.get('asm_ext') is True
+        if use_asm_ext:
+            avr_ext_path = self.builder_root + '/tools/avr-asm-ext.jar'
+            ext_out = full_out + '.asm'
+            processed_out = ext_out[:-2] + '.asmext.asm'
+            self.execute('java -jar ' + avr_ext_path + ' ' + full_src + ' ' + processed_out)
+            full_src = processed_out
 
         cmd = self.string(self.path_avra, '-fI', '-o', self.get_out_filepath('.hex'),
                           # '-l', self.get_out_filepath('.lst'),
                           '-I', include_path, full_src)
-        print cmd
+        #print cmd
         self.execute(cmd)
         # avra -fI -o out.hex - l out.lst - I / Users / trol / Bin / avr - builder / asm / include / firmware.asm
 
