@@ -291,7 +291,7 @@
 
 ; ***** INTERRUPT VECTORS ************************************************
 .equ	TXDONEaddr	= 0x0002	; Transmission Done, Bit Timer Flag 2 Interrupt
-.equ	TXEMPTYaddr	= 0x0004	; Transmit Buffer Empty, Bit Itmer Flag 0 Interrupt
+.equ	TXEMPTYaddr	= 0x0004	; Transmit Buffer Empty, Bit Timer Flag 0 Interrupt
 
 .equ	INT_VECTORS_SIZE	= 6	; size in words
 

@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 import os
 import glob
+import sys
 
 from compiler import Compiler
 
 __author__ = 'trol'
+
+
+def error(msg):
+    print msg
+    sys.exit(-1)
 
 
 class Project:
@@ -19,7 +25,10 @@ class Project:
 
     def load(self, file_name):
         # load project file
+        self._loc['sys'] = globals()['sys']
+        self._loc['error'] = globals()['error']
         execfile(self.root_path + '/' + file_name, self._glob, self._loc)
+        sys.stdout.flush()
 
         if self.get('src') is None or len(self.get('src')) == 0:
             Compiler.error("Sources doesn't defined. Add 'src' parameter")
@@ -40,7 +49,6 @@ class Project:
                 self._full_sources_list.add(relative)
 
     def get(self, name):
-#        print '\nget  name', name
         result = None
         if self.current_configuration is not None and 'configurations' in self._loc.keys():
             configurations = self._loc['configurations']

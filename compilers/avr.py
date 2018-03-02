@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import os
-from compiler import Compiler
+
 import utils
+from compiler import Compiler
 
 __author__ = 'trol'
 
@@ -21,6 +22,7 @@ class AvrCompiler(Compiler):
     path_avra = None
     avrgcc_home = None
     avra_home = None
+    compile_step = 1
 
     compiled_objects_path = []
     is_assembler_single_file_project = None
@@ -66,10 +68,19 @@ class AvrCompiler(Compiler):
 
         self.path_build = self.project.root_path + '/build'
 
-        if len(self.project.get_sources()) == 1 and next(iter(self.project.get_sources())).lower().endswith('.asm'):
+        self.is_assembler_single_file_project = False
+        avrx_cnt = 0
+        for s in self.project.get_sources():
+            if s.lower().endswith('.avrx'):
+                avrx_cnt += 1
+        if avrx_cnt > 1:
+            self.error("only one .avrx file expected but found " + str(avrx_cnt))
+        elif avrx_cnt == 1:
             self.is_assembler_single_file_project = True
-        else:
-            self.is_assembler_single_file_project = False
+        elif len(self.project.get_sources()) == 1:
+            src_name = next(iter(self.project.get_sources()))
+            if src_name.lower().endswith('.asm'):
+                self.is_assembler_single_file_project = True
         self.builder_root = builder_root
 
     def _find_util(self, exe_name):
@@ -119,6 +130,8 @@ class AvrCompiler(Compiler):
         self.compiled_objects_path = []
         Compiler.build(self)
         if self.is_assembler_single_file_project:
+            self.compile_step += 1
+            Compiler.build(self)
             return
         # link files
         self.link_project(self.project)
@@ -129,6 +142,10 @@ class AvrCompiler(Compiler):
         self.show_size()
 
     def compile(self, source_file_name, ext):
+        if self.compile_step == 1 and ext == 'avrx':
+            return
+        if self.compile_step == 2 and ext != 'avrx':
+            return
         # print 'Compile', source_file_name
         # prepare build directory
         if not os.path.exists(self.path_build):
@@ -139,6 +156,10 @@ class AvrCompiler(Compiler):
             self.compile_s(source_file_name)
         elif ext == 'asm':
             self.compile_asm(source_file_name)
+        elif ext == 'avrx':
+            self.compile_avrx(source_file_name)
+        elif ext == 'avrxh':
+            self.compile_avrxh(source_file_name)
 
     def compile_c(self, source_file_name):
         if self.path_avr_gcc is None:
@@ -170,7 +191,7 @@ class AvrCompiler(Compiler):
             args.append('-DNDEBUG -Os -g0')
 
         user_options = self.project.get('compiler_options')
-        cmd = self.string(self.path_avr_gcc, args, arg_cpu, user_options, self.get_defines_args(), full_src,
+        cmd = self.string(self.path_avr_gcc, args, arg_cpu, user_options, self.get_defines_args('-D'), full_src,
                           '-o ' + full_out + '.o')
 
         os.chdir(os.path.dirname(full_src))
@@ -192,10 +213,9 @@ class AvrCompiler(Compiler):
         utils.mkdir_for_file_out(full_out)
         use_asm_ext = self.project.get('asm_ext') is True
         if use_asm_ext:
-            avr_ext_path = self.builder_root + '/tools/avr-asm-ext.jar'
             ext_out = full_out + '.s'
             processed_out = ext_out[:-2] + '.asmext.s'
-            self.execute('java -jar ' + avr_ext_path + ' ' + full_src + ' ' + processed_out)
+            self.avr_asm_ext(full_src, processed_out)
             full_src = processed_out
 
         os.chdir(os.path.dirname(full_src))
@@ -205,11 +225,15 @@ class AvrCompiler(Compiler):
         arg_include = '-I ' + self.project.root_path + '/src'
 
         user_options = self.project.get('compiler_options')
-        cmd = self.string(self.path_avr_gcc, arg_compile, arg_cpu, arg_include, user_options, self.get_defines_args(),
+        cmd = self.string(self.path_avr_gcc, arg_compile, arg_cpu, arg_include, user_options, self.get_defines_args('-D'),
                           '-o ' + full_out + '.o', full_src)
         utils.remove_file_if_exist(full_out + '.o')
         self.execute(cmd)
         self.compiled_objects_path.append(full_out + '.o')
+
+    def avr_asm_ext(self, src, out):
+        avr_ext_path = self.builder_root + '/tools/avr-asm-ext.jar'
+        self.execute('java -jar ' + avr_ext_path + ' ' + src + ' ' + out)
 
     def compile_asm(self, source_file_name):
         if self.path_avra is None:
@@ -236,6 +260,37 @@ class AvrCompiler(Compiler):
         #print cmd
         self.execute(cmd)
         # avra -fI -o out.hex - l out.lst - I / Users / trol / Bin / avr - builder / asm / include / firmware.asm
+
+    def compile_avrx(self, source_file_name):
+        if source_file_name.startswith('src/'):
+            srcn = source_file_name[len('src/'):]
+        else:
+            srcn = source_file_name
+
+        full_src = self.project.root_path + '/' + source_file_name
+        full_out = self.path_build + '/' + os.path.splitext(srcn)[0] + '.asm'
+        self.avr_asm_ext(full_src, full_out)
+        include_path = self.builder_root + '/asm/include'
+        cmd = self.string(self.path_avra, '-fI', '-o', self.get_out_filepath('.hex'),
+                          self.get_defines_args('-D '),
+                          # '-l', self.get_out_filepath('.lst'),
+                          '-I', include_path,
+                          '-I', self.path_build,
+                          '-I', self.project.root_path + '/src',
+                          full_out)
+        #print cmd
+        self.execute(cmd)
+
+    def compile_avrxh(self, source_file_name):
+        if source_file_name.startswith('src/'):
+            srcn = source_file_name[len('src/'):]
+        else:
+            srcn = source_file_name
+
+        full_src = self.project.root_path + '/' + source_file_name
+        full_out = self.path_build + '/' + srcn
+        self.avr_asm_ext(full_src, full_out)
+
 
     # def compile_asm(self, source_file_name):
     #     print utils.parent_path(utils.parent_path(self.path_avr_as))
@@ -393,14 +448,16 @@ class AvrCompiler(Compiler):
     def get_elf_filepath(self):
         return self.get_out_filepath('.elf')
 
-    def get_defines_args(self):
+    def get_defines_args(self, key_str):
+        #key_str = '-D'
         defs = self.project.get('defines')
         result = ''
         if defs is not None:
             for d in defs:
-                result += '-D' + d + ' '
+                result += key_str + d + ' '
         defs_config = self.project.get('define')
         if defs_config is not None:
             for d in defs_config:
-                result += '-D' + d + ' '
+                result += key_str + d + ' '
         return result
+
