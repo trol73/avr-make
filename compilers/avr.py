@@ -158,8 +158,8 @@ class AvrCompiler(Compiler):
             self.compile_asm(source_file_name)
         elif ext == 'avrx':
             self.compile_avrx(source_file_name)
-        elif ext == 'avrxh':
-            self.compile_avrxh(source_file_name)
+#        elif ext == 'avrxh':
+#            self.compile_avrxh(source_file_name)
 
     def compile_c(self, source_file_name):
         if self.path_avr_gcc is None:
@@ -215,7 +215,7 @@ class AvrCompiler(Compiler):
         if use_asm_ext:
             ext_out = full_out + '.s'
             processed_out = ext_out[:-2] + '.asmext.s'
-            self.avr_asm_ext(full_src, processed_out)
+            self.avr_asm_ext_single(full_src, processed_out)
             full_src = processed_out
 
         os.chdir(os.path.dirname(full_src))
@@ -231,9 +231,23 @@ class AvrCompiler(Compiler):
         self.execute(cmd)
         self.compiled_objects_path.append(full_out + '.o')
 
-    def avr_asm_ext(self, src, out):
+    def avr_asm_ext_single(self, src, out):
         avr_ext_path = self.builder_root + '/tools/avr-asm-ext.jar'
         self.execute('java -jar ' + avr_ext_path + ' ' + src + ' ' + out)
+
+    def avr_asm_ext_group(self, src_path, out_path, files):
+        avr_ext_path = self.builder_root + '/tools/avr-asm-ext.jar'
+        in_src = False
+        files_str = ''
+        for f in files:
+            if f.find('src/') == 0:
+                f = f[4:]
+                in_src = True
+            files_str += ' ' + f
+        if in_src:
+            src_path += '/src'
+        cmd = 'java -jar ' + avr_ext_path + ' "' + src_path + '" "' + out_path + '"' + files_str
+        self.execute(cmd)
 
     def compile_asm(self, source_file_name):
         if self.path_avra is None:
@@ -268,8 +282,14 @@ class AvrCompiler(Compiler):
             srcn = source_file_name
 
         full_src = self.project.root_path + '/' + source_file_name
-        full_out = self.path_build + '/' + os.path.splitext(srcn)[0] + '.asm'
-        self.avr_asm_ext(full_src, full_out)
+        #full_out = self.path_build + '/' + os.path.splitext(srcn)[0] + '.asm'
+        full_out = self.path_build + '/' + srcn
+        print self.project.root_path
+        print self.path_build
+        preprocess_list = self.project.get_sources_with_ext('avrxh')
+        preprocess_list.append(source_file_name)
+        #self.avr_asm_ext_single(full_src, full_out)
+        self.avr_asm_ext_group(self.project.root_path, self.path_build, preprocess_list)
         include_path = self.builder_root + '/asm/include'
         cmd = self.string(self.path_avra, '-fI', '-o', self.get_out_filepath('.hex'),
                           self.get_defines_args('-D '),
@@ -289,7 +309,7 @@ class AvrCompiler(Compiler):
 
         full_src = self.project.root_path + '/' + source_file_name
         full_out = self.path_build + '/' + srcn
-        self.avr_asm_ext(full_src, full_out)
+        self.avr_asm_ext_single(full_src, full_out)
 
 
     # def compile_asm(self, source_file_name):
