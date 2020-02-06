@@ -47,22 +47,7 @@ elif compiler_name == 'g++':
 else:
     Compiler.error('Unknown compiler: ' + compiler_name)
 
+
 compiler.init(builder_root)
 compiler.run(sys.argv[1:])
 
-# avr-gcc -Wall -Os -DF_CPU=16000000 -mmcu=atmega328p -c main.c -o main.o
-# main.c:18:6: warning: return type of 'main' is not 'int' [-Wmain]
-#  void main() {
-#       ^
-# avr-gcc -Wall -Os -DF_CPU=16000000 -mmcu=atmega328p -o main.elf main.o
-# rm -f main.hex
-# avr-objcopy -j .text -j .data -O ihex main.elf main.hex
-# avr-size --format=avr --mcu=atmega328p main.elf
-# AVR Memory Usage
-# ----------------
-# Device: atmega328p
-#
-# Program:     186 bytes (0.6% Full)
-# (.text + .data + .bootloader)
-#
-# Data:          0 bytes (0

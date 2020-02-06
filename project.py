@@ -7,10 +7,17 @@ from compiler import Compiler
 
 __author__ = 'trol'
 
+_current_configuration = None
+
 
 def error(msg):
     print msg
     sys.exit(-1)
+
+
+# def has_current_configuration():
+#     global _current_configuration
+#     return _current_configuration is not None
 
 
 class Project:
@@ -27,6 +34,7 @@ class Project:
         # load project file
         self._loc['sys'] = globals()['sys']
         self._loc['error'] = globals()['error']
+        # self._loc['has_current_configuration'] = globals()['has_current_configuration']
         execfile(self.root_path + '/' + file_name, self._glob, self._loc)
         sys.stdout.flush()
 
@@ -56,7 +64,7 @@ class Project:
                 config = configurations[self.current_configuration]
                 if name in config.keys():
                     result = config[name]
-        if result is not None: # and type(result) is not list:
+        if result is not None:  # and type(result) is not list:
             return result
 
         if name in self._loc.keys():
@@ -112,3 +120,11 @@ class Project:
         if not self.is_defined('configurations'):
             return []
         return self.get('configurations').keys()
+
+    def get_current_configuration(self):
+        return self.current_configuration
+
+    def set_current_configuration(self, config_name):
+        global _current_configuration
+        self.current_configuration = config_name
+        _current_configuration = config_name

@@ -23,6 +23,8 @@ class AvrCompiler(Compiler):
     avrgcc_home = None
     avra_home = None
     compile_step = 1
+    art_files = []
+    art_to_s_files_map = {}
 
     compiled_objects_path = []
     is_assembler_single_file_project = None
@@ -31,7 +33,7 @@ class AvrCompiler(Compiler):
         if 'AVR_GCC_HOME' in os.environ.keys():
             self.avrgcc_home = os.environ['AVR_GCC_HOME']
             if self.avrgcc_home is not None:
-                self.avrgcc_home = self.avrgcc_home.strip();
+                self.avrgcc_home = self.avrgcc_home.strip()
                 if len(self.avrgcc_home) > 1 and self.avrgcc_home[0] == '"' and self.avrgcc_home[-1] == '"':
                     self.avrgcc_home = self.avrgcc_home[1:-1]
                 if not os.path.exists(self.avrgcc_home):
@@ -69,10 +71,19 @@ class AvrCompiler(Compiler):
         self.path_build = self.project.root_path + '/build'
 
         self.is_assembler_single_file_project = False
+
         avrx_cnt = 0
         for s in self.project.get_sources():
             if s.lower().endswith('.avrx'):
                 avrx_cnt += 1
+            elif s.lower().endswith('.art'):
+                self.art_files.append(s)
+                name_wo_ext = os.path.splitext(s)[0]
+                if name_wo_ext.startswith('src/'):
+                    name_wo_ext = name_wo_ext[4:]
+                full_out = self.path_build + '/' + name_wo_ext + '.S'
+                utils.mkdir_for_file_out(full_out)
+                self.art_to_s_files_map[s] = full_out
         if avrx_cnt > 1:
             self.error("only one .avrx file expected but found " + str(avrx_cnt))
         elif avrx_cnt == 1:
@@ -99,36 +110,27 @@ class AvrCompiler(Compiler):
         return self.quote(result)
 
     def run(self, argv):
-        op_upload = False
-        op_clean = False
+        super(AvrCompiler, self).run(argv)
 
-        for arg in argv:
-            if arg == 'clean':
-                op_clean = True
-            elif arg == 'upload':
-                op_upload = True
-            elif arg == 'all':
-                for conf in self.project.get_configurations():
-                    self.configurations.add(conf)
-            else:
-                self.configurations.add(arg)
-        if len(self.configurations) == 0:
-            self.configurations.add(None)
-
-        if op_clean:
+        if self.op_clean:
             self.clean()
         for config in self.configurations:
-            self.project.current_configuration = config
+            self.project.set_current_configuration(config)
             if config is not None:
                 print '--[' + config + ']--'
             self.build()
-        if op_upload:
+        if self.op_upload:
             self.upload_firmware()
 
     def build(self):
         # compile files
         self.compiled_objects_path = []
+        if len(self.art_files) > 0:
+            self.compile_all_art()
+            # for s in self.art_to_s_files_map.values():
+            #     self.compile_art_s(s)
         Compiler.build(self)
+
         if self.is_assembler_single_file_project:
             self.compile_step += 1
             Compiler.build(self)
@@ -154,12 +156,17 @@ class AvrCompiler(Compiler):
             self.compile_c(source_file_name)
         elif ext == 's':
             self.compile_s(source_file_name)
+        elif ext == 'spp':
+            self.compile_s(source_file_name)
         elif ext == 'asm':
             self.compile_asm(source_file_name)
+        elif ext == 'art':
+            self.compile_art(source_file_name)
         elif ext == 'avrx':
             self.compile_avrx(source_file_name)
-#        elif ext == 'avrxh':
-#            self.compile_avrxh(source_file_name)
+
+    #        elif ext == 'avrxh':
+    #            self.compile_avrxh(source_file_name)
 
     def compile_c(self, source_file_name):
         if self.path_avr_gcc is None:
@@ -225,11 +232,36 @@ class AvrCompiler(Compiler):
         arg_include = '-I ' + self.project.root_path + '/src'
 
         user_options = self.project.get('compiler_options')
-        cmd = self.string(self.path_avr_gcc, arg_compile, arg_cpu, arg_include, user_options, self.get_defines_args('-D'),
+        cmd = self.string(self.path_avr_gcc, arg_compile, arg_cpu, arg_include, user_options,
+                          self.get_defines_args('-D'),
                           '-o ' + full_out + '.o', full_src)
         utils.remove_file_if_exist(full_out + '.o')
         self.execute(cmd)
         self.compiled_objects_path.append(full_out + '.o')
+
+    def compile_all_art(self):
+        # print self.art_files, self.art_to_s_files_map
+        rat_path = self.builder_root + '/tools/the-rat.jar'
+        files_str = ''
+        for art in self.art_files:
+            files_str += "'" + art + "' '" + self.art_to_s_files_map[art] + "' "
+        defines = ' -DCPU=' + self.project.get('mcu') + ' ' + self.get_defines_args('-D')
+        cmd = 'java -jar ' + rat_path + ' -gcc ' + defines + ' ' + files_str
+        self.execute(cmd)
+
+    def compile_art_s(self, full_src):
+        arg_cpu = '-DF_CPU=' + str(self.project.get('frequency')) + ' -mmcu=' + self.project.get('mcu')
+        arg_compile = '-Wa,-gdwarf2 -x assembler-with-cpp -c -mrelax'
+        arg_include = '-I ' + self.project.root_path + '/src'
+
+        user_options = self.project.get('compiler_options')
+        full_out = full_src[:-1] + 'o'
+        cmd = self.string(self.path_avr_gcc, arg_compile, arg_cpu, arg_include, user_options,
+                          self.get_defines_args('-D'),
+                          '-o ' + full_out, full_src)
+        utils.remove_file_if_exist(full_out)
+        self.execute(cmd)
+        self.compiled_objects_path.append(full_out)
 
     def avr_asm_ext_single(self, src, out):
         avr_ext_path = self.builder_root + '/tools/avr-asm-ext.jar'
@@ -271,9 +303,12 @@ class AvrCompiler(Compiler):
         cmd = self.string(self.path_avra, '-fI', '-o', self.get_out_filepath('.hex'),
                           # '-l', self.get_out_filepath('.lst'),
                           '-I', include_path, full_src)
-        #print cmd
+        # print cmd
         self.execute(cmd)
         # avra -fI -o out.hex - l out.lst - I / Users / trol / Bin / avr - builder / asm / include / firmware.asm
+
+    def compile_art(self, source_file_name):
+        self.compile_art_s(self.art_to_s_files_map[source_file_name])
 
     def compile_avrx(self, source_file_name):
         if source_file_name.startswith('src/'):
@@ -282,13 +317,13 @@ class AvrCompiler(Compiler):
             srcn = source_file_name
 
         full_src = self.project.root_path + '/' + source_file_name
-        #full_out = self.path_build + '/' + os.path.splitext(srcn)[0] + '.asm'
+        # full_out = self.path_build + '/' + os.path.splitext(srcn)[0] + '.asm'
         full_out = self.path_build + '/' + srcn
-        print self.project.root_path
-        print self.path_build
+        # print self.project.root_path
+        # print self.path_build
         preprocess_list = self.project.get_sources_with_ext('avrxh')
         preprocess_list.append(source_file_name)
-        #self.avr_asm_ext_single(full_src, full_out)
+        # self.avr_asm_ext_single(full_src, full_out)
         self.avr_asm_ext_group(self.project.root_path, self.path_build, preprocess_list)
         include_path = self.builder_root + '/asm/include'
         cmd = self.string(self.path_avra, '-fI', '-o', self.get_out_filepath('.hex'),
@@ -298,8 +333,12 @@ class AvrCompiler(Compiler):
                           '-I', self.path_build,
                           '-I', self.project.root_path + '/src',
                           full_out)
-        #print cmd
+        # print cmd
         self.execute(cmd)
+        bootloader = self.project.get('bootloader_hex')
+        if bootloader is not None:
+            os.chdir(self.project.root_path)
+            self.inject_bootloader(self.get_out_filepath('.hex'), bootloader)
 
     def compile_avrxh(self, source_file_name):
         if source_file_name.startswith('src/'):
@@ -310,7 +349,6 @@ class AvrCompiler(Compiler):
         full_src = self.project.root_path + '/' + source_file_name
         full_out = self.path_build + '/' + srcn
         self.avr_asm_ext_single(full_src, full_out)
-
 
     # def compile_asm(self, source_file_name):
     #     print utils.parent_path(utils.parent_path(self.path_avr_as))
@@ -469,7 +507,7 @@ class AvrCompiler(Compiler):
         return self.get_out_filepath('.elf')
 
     def get_defines_args(self, key_str):
-        #key_str = '-D'
+        # key_str = '-D'
         defs = self.project.get('defines')
         result = ''
         if defs is not None:
@@ -480,4 +518,3 @@ class AvrCompiler(Compiler):
             for d in defs_config:
                 result += key_str + d + ' '
         return result
-

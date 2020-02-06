@@ -5,11 +5,14 @@ import sys
 __author__ = 'trol'
 
 
-class Compiler:
+class Compiler(object):
     project = None
     verbose_mode = False
     builder_root = None
     configurations = []
+    op_clean = False
+    op_run = False
+    op_upload = False
 
     def __init__(self, project):
         self.project = project
@@ -19,7 +22,23 @@ class Compiler:
         pass
 
     def run(self, argv):
-        pass
+        for arg in argv:
+            if arg == 'clean':
+                self.op_clean = True
+            if arg == 'run':
+                self.op_run = True
+            elif arg == 'upload':
+                self.op_upload = True
+            elif arg == 'all':
+                for conf in self.project.get_configurations():
+                    self.configurations.add(conf)
+                self.project.set_current_configuration(arg)
+            else:
+                self.configurations.add(arg)
+                self.project.set_current_configuration(arg)
+
+        if len(self.configurations) == 0:
+            self.configurations.add(None)
 
     def build(self):
         sources = self.project.get_sources()
@@ -53,7 +72,6 @@ class Compiler:
             print '\033[1;35m' + 'error: ' + str(msg) + '\033[1;m'
         else:
             print 'WARNING: ' + str(msg)
-
 
     @staticmethod
     def verbose(msg):
@@ -102,4 +120,3 @@ class Compiler:
         return path
 
 # all colors http://www.siafoo.net/snippet/88
-

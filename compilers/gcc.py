@@ -14,30 +14,16 @@ class GccCompiler(Compiler):
         pass
 
     def run(self, argv):
-        op_clean = False
-        op_run = False
+        super(GccCompiler, self).run(argv)
 
-        for arg in argv:
-            if arg == 'clean':
-                op_clean = True
-            if arg == 'run':
-                op_run = True
-            elif arg == 'all':
-                for conf in self.project.get_configurations():
-                    self.configurations.add(conf)
-            else:
-                self.configurations.add(arg)
-        if len(self.configurations) == 0:
-            self.configurations.add(None)
-
-        if op_clean:
+        if self.op_clean:
             self.clean()
         for config in self.configurations:
-            self.project.current_configuration = config
+            self.project.set_current_configuration(config)
             if config is not None:
                 print '--[' + config + ']--'
             self.build()
-        if op_run:
+        if self.op_run:
             self.execute('./' + self.executable_file_name())
 
     def build(self):
@@ -50,18 +36,19 @@ class GccCompiler(Compiler):
         if includes is not None:
             for p in includes:
                 s += ' -I ' + p
-        s += ' ' + self.get_defines_args()
+        
+        s += ' ' + self.get_options_args() + self.get_defines_args()
         libs = self.project.get('libs')
         if libs is None or len(libs.strip()) == 0:
             s += ' $(pkg-config --cflags)'
         else:
             s += ' $(pkg-config --cflags --libs ' + libs + ')'
         s += ' -iquote  "' + self.project.root_path + '/src"'
-
+        #print s
         self.execute(s)
 
     def compile(self, source_file_name, ext):
-        if ext == 'c' or ext == 'cpp':
+        if ext == 'c' or ext == 'cpp' or ext == 'cc':
             self.files_to_compile.append(source_file_name)
 
     def executable_file_name(self):
@@ -78,4 +65,13 @@ class GccCompiler(Compiler):
         result = ''
         for d in defs:
             result += '-D' + d + ' '
+        return result
+
+    def get_options_args(self):
+        options = self.project.get('compiler_options')
+        if options is None:
+            return ''
+        result = ''
+        for o in options:
+            result += o + ' '
         return result
