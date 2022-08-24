@@ -8,6 +8,8 @@ from compiler import Compiler
 __author__ = 'trol'
 
 CROSSPACK_DEFAULT_LOCATION = '/usr/local/CrossPack-AVR/bin/'
+HOMEBREW_DEFAULT_LOCATION = '/opt/homebrew/bin/'
+
 
 
 class AvrCompiler(Compiler):
@@ -106,6 +108,9 @@ class AvrCompiler(Compiler):
             # try CrossPack-AVR default location
             if result is None and utils.is_exe(CROSSPACK_DEFAULT_LOCATION + exe_name):
                 result = CROSSPACK_DEFAULT_LOCATION + exe_name
+            if result is None and utils.is_exe(HOMEBREW_DEFAULT_LOCATION + exe_name):
+                result = HOMEBREW_DEFAULT_LOCATION + exe_name
+            
 
         return self.quote(result)
 
@@ -117,7 +122,7 @@ class AvrCompiler(Compiler):
         for config in self.configurations:
             self.project.set_current_configuration(config)
             if config is not None:
-                print '--[' + config + ']--'
+                print('--[' + config + ']--')
             self.build()
         if self.op_upload:
             self.upload_firmware()
@@ -246,7 +251,7 @@ class AvrCompiler(Compiler):
         for art in self.art_files:
             files_str += "'" + art + "' '" + self.art_to_s_files_map[art] + "' "
         defines = ' -DCPU=' + self.project.get('mcu') + ' ' + self.get_defines_args('-D')
-        cmd = 'java -jar ' + rat_path + ' -gcc ' + defines + ' ' + files_str
+        cmd = 'java -jar ' + rat_path + ' -gcc -list ' + defines + ' ' + files_str
         self.execute(cmd)
 
     def compile_art_s(self, full_src):
@@ -431,7 +436,7 @@ class AvrCompiler(Compiler):
                     firmware_data += bootloader_data
         with open(firmware, "w") as f:
             f.write(firmware_data)
-        print 'bootloader injected'
+        print('bootloader injected')
 
     def make_eep(self):
         if self.path_avr_objcopy is None:

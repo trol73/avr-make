@@ -21,7 +21,7 @@ class GccCompiler(Compiler):
         for config in self.configurations:
             self.project.set_current_configuration(config)
             if config is not None:
-                print '--[' + config + ']--'
+                print('--[' + config + ']--')
             self.build()
         if self.op_run:
             self.execute('./' + self.executable_file_name())
@@ -44,7 +44,7 @@ class GccCompiler(Compiler):
         else:
             s += ' $(pkg-config --cflags --libs ' + libs + ')'
         s += ' -iquote  "' + self.project.root_path + '/src"'
-        #print s
+        #print(s)
         self.execute(s)
 
     def compile(self, source_file_name, ext):
@@ -55,7 +55,7 @@ class GccCompiler(Compiler):
         return self.project.get_name()
 
     def clean(self):
-        print self.executable_file_name()
+        print(self.executable_file_name())
         utils.remove_file_if_exist(self.executable_file_name())
 
     def get_defines_args(self):

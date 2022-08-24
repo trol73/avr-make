@@ -47,7 +47,6 @@ elif compiler_name == 'g++':
 else:
     Compiler.error('Unknown compiler: ' + compiler_name)
 
-
 compiler.init(builder_root)
 compiler.run(sys.argv[1:])
 

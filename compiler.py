@@ -51,34 +51,34 @@ class Compiler(object):
 
     def execute(self, cmd):
         if self.verbose_mode:
-            print cmd
+            print(cmd)
         rc = os.system(cmd)
         if rc != 0:
-            print 'Exit code is', rc
-            print cmd
+            print('Exit code is', rc)
+            print(cmd)
             quit(-1)
 
     @staticmethod
     def error(msg):
         if sys.stdout.isatty():
-            print '\033[1;31m' + 'error: ' + str(msg) + '\033[1;m'
+            print('\033[1;31m' + 'error: ' + str(msg) + '\033[1;m')
         else:
-            print 'ERROR: ' + str(msg)
+            print('ERROR: ' + str(msg))
         quit(-1)
 
     @staticmethod
     def warning(msg):
         if sys.stdout.isatty():
-            print '\033[1;35m' + 'error: ' + str(msg) + '\033[1;m'
+            print('\033[1;35m' + 'error: ' + str(msg) + '\033[1;m')
         else:
-            print 'WARNING: ' + str(msg)
+            print('WARNING: ' + str(msg))
 
     @staticmethod
     def verbose(msg):
         if sys.stdout.isatty():
-            print '\033[1;30m' + str(msg) + '\033[1;m'
+            print('\033[1;30m' + str(msg) + '\033[1;m')
         else:
-            print msg
+            print(msg)
 
     @staticmethod
     def string(*args):

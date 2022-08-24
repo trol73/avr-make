@@ -11,7 +11,7 @@ _current_configuration = None
 
 
 def error(msg):
-    print msg
+    print(msg)
     sys.exit(-1)
 
 
@@ -35,7 +35,8 @@ class Project:
         self._loc['sys'] = globals()['sys']
         self._loc['error'] = globals()['error']
         # self._loc['has_current_configuration'] = globals()['has_current_configuration']
-        execfile(self.root_path + '/' + file_name, self._glob, self._loc)
+        #execfile(self.root_path + '/' + file_name, self._glob, self._loc)
+        exec(open(self.root_path + '/' + file_name).read(), self._glob, self._loc)
         sys.stdout.flush()
 
         if self.get('src') is None or len(self.get('src')) == 0:
@@ -71,7 +72,7 @@ class Project:
             general_result = self._loc[name]
             if general_result is not None and result is not None:
                 if type(result) != type(general_result):
-                    print 'wrong parameter', name, 'for configuration', self.current_configuration
+                    print('wrong parameter', name, 'for configuration', self.current_configuration)
                     quit(-2)
 
                 if type(result) is list:
