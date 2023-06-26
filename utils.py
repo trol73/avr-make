@@ -77,3 +77,36 @@ def is_windows():
 
 def parent_path(s):
     return os.path.split(os.path.abspath(s))[0]
+
+
+def parse_config(filepath):
+    res = {}
+    if not os.path.exists(filepath):
+        return res
+    with open(filepath) as file:
+        for line in file:
+            i = line.index('=')
+            if i < 0:
+                continue
+            name = line[:i].strip()
+            value = line[i+1:].strip()
+            if value.startswith("'") and value.endswith("'"):
+                value = value[1:-1]
+            res[name] = value
+    return res
+
+
+def parse_list_param(config, param):
+    v = config.get(param)
+    if v is None:
+        return []
+    res = []
+    for s in v.split(','):
+        res.append(s.strip())
+    return res
+
+
+def get_config():
+    loc = parent_path(__file__)
+    filepath = os.path.join(loc, 'avr-builder.conf')
+    return parse_config(filepath)

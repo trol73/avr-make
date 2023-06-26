@@ -36,16 +36,28 @@ prj.load(MAKE_FILE_NAME)
 # print prj.get('frequency')
 # print prj.get_sources()
 compiler_name = prj.get('compiler')
+target_platform = prj.get('platform')
+
 if compiler_name is None or compiler_name == 'avr':
     compiler = AvrCompiler(prj)
 elif compiler_name == 'gcc':
     compiler = GccCompiler(prj)
     compiler.cmd = 'gcc'
+    compiler.platform = target_platform
+elif compiler_name == 'gcc-w64':
+    compiler = GccCompiler(prj)
+    compiler.cmd = 'x86_64-w64-mingw32-gcc'
+    compiler.platform = 'win-x64'
+elif compiler_name == 'gcc-i686':
+    compiler = GccCompiler(prj)
+    compiler.cmd = 'i686-w64-mingw32-gcc'
+    compiler.platform = 'win-i686'
 elif compiler_name == 'g++':
     compiler = GccCompiler(prj)
     compiler.cmd = 'g++'
 else:
     Compiler.error('Unknown compiler: ' + compiler_name)
+    sys.exit(100)
 
 compiler.init(builder_root)
 compiler.run(sys.argv[1:])
