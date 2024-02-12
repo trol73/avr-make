@@ -158,11 +158,12 @@ class GccCompiler(Compiler):
 
     @staticmethod
     def determine_platform():
+        p = platform.platform().lower()
         if utils.is_windows():
             osn = 'win'
-        elif platform.platform().lower().index('macos') >= 0:
+        elif p.find('macos') >= 0:
             osn = 'macos'
-        elif platform.platform().lower().index('linux') >= 0:
+        elif p.find('linux') >= 0:
             osn = 'linux'
         else:
             osn = ''
