@@ -209,6 +209,7 @@ class AvrCompiler(Compiler):
         os.chdir(os.path.dirname(full_src))
         utils.remove_file_if_exist(full_out + '.o')
 
+        #print(cmd)
         self.execute(cmd)
 
         self.compiled_objects_path.append(full_out + '.o')
@@ -308,7 +309,7 @@ class AvrCompiler(Compiler):
         cmd = self.string(self.path_avra, '-fI', '-o', self.get_out_filepath('.hex'),
                           # '-l', self.get_out_filepath('.lst'),
                           '-I', include_path, full_src)
-        # print cmd
+        # print(cmd)
         self.execute(cmd)
         # avra -fI -o out.hex - l out.lst - I / Users / trol / Bin / avr - builder / asm / include / firmware.asm
 
