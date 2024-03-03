@@ -55,6 +55,14 @@ elif compiler_name == 'gcc-i686':
 elif compiler_name == 'g++':
     compiler = GccCompiler(prj)
     compiler.cmd = 'g++'
+elif compiler_name == 'g++-w64':
+    compiler = GccCompiler(prj)
+    compiler.cmd = 'x86_64-w64-mingw32-g++'
+    compiler.platform = 'win-x64'
+elif compiler_name == 'g++-i686':
+    compiler = GccCompiler(prj)
+    compiler.cmd = 'i686-w64-mingw32-g++'
+    compiler.platform = 'win-i686'
 else:
     Compiler.error('Unknown compiler: ' + compiler_name)
     sys.exit(100)

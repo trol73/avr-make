@@ -85,14 +85,17 @@ def parse_config(filepath):
         return res
     with open(filepath) as file:
         for line in file:
-            i = line.index('=')
+            i = line.find('=')
             if i < 0:
                 continue
             name = line[:i].strip()
             value = line[i+1:].strip()
             if value.startswith("'") and value.endswith("'"):
                 value = value[1:-1]
-            res[name] = value
+            if name in res.keys():
+                res[name] += ',' + value
+            else:
+                res[name] = value
     return res
 
 
