@@ -159,7 +159,7 @@ class AvrCompiler(Compiler):
             os.mkdir(self.path_build)
         if ext == 'c':
             self.compile_c(source_file_name)
-        elif ext == 's':
+        elif ext == 's' or ext == 'S':
             self.compile_s(source_file_name)
         elif ext == 'spp':
             self.compile_s(source_file_name)

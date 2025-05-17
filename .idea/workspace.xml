@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0d6e7451-2aff-4971-a9dd-f3d17b27e4eb" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/avr-build.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/avr-build.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/compilers/avr.py" beforeDir="false" afterPath="$PROJECT_DIR$/compilers/avr.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tools/the-rat.jar" beforeDir="false" afterPath="$PROJECT_DIR$/tools/the-rat.jar" afterDir="false" />
@@ -32,6 +30,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="1RjrdHcm7nvZCL73LYQFagduWdm" />
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -94,6 +95,7 @@
     </configuration>
     <configuration name="avrmake" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="avr-build" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -117,6 +119,7 @@
     </configuration>
     <configuration name="update_hosts" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="avr-build" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -138,6 +141,7 @@
     </configuration>
     <configuration default="true" type="tests" factoryName="Nosetests">
       <module name="avr-build" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
@@ -153,6 +157,7 @@
     </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
       <module name="avr-build" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
@@ -167,6 +172,7 @@
     </configuration>
     <configuration default="true" type="tests" factoryName="py.test">
       <module name="avr-build" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
@@ -191,6 +197,13 @@
         <item itemvalue="Python.avrmake" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-337b0a7a993a-31b6be0877a2-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.19416.19" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
