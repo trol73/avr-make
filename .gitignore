@@ -54,3 +54,5 @@ target/
 .idea/workspace.xml
 .idea/modules.xml
 .idea/avr-build.iml
+
+.DS_Store
