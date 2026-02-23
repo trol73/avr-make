@@ -6,6 +6,7 @@ import sys
 import utils
 from compilers.avr import AvrCompiler
 from compilers.gcc import GccCompiler
+from compilers.risc_v import RiscVCompiler
 from project import Project
 from compiler import Compiler
 
@@ -63,6 +64,8 @@ elif compiler_name == 'g++-i686':
     compiler = GccCompiler(prj)
     compiler.cmd = 'i686-w64-mingw32-g++'
     compiler.platform = 'win-i686'
+elif compiler_name == 'risc-v':
+    compiler = RiscVCompiler(prj)
 else:
     Compiler.error('Unknown compiler: ' + compiler_name)
     sys.exit(100)

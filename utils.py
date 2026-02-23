@@ -4,6 +4,7 @@ __author__ = 'trol'
 
 import os
 import platform
+from pathlib import Path
 
 
 def is_exe(fpath):
@@ -113,3 +114,27 @@ def get_config():
     loc = parent_path(__file__)
     filepath = os.path.join(loc, 'avr-builder.conf')
     return parse_config(filepath)
+
+
+def find_first_file_by_suffix(directory, suffix):
+    dir_path = Path(directory)
+
+    if not dir_path.exists() or not dir_path.is_dir():
+        raise ValueError(f"Path not exists: {directory}")
+
+    # if not suffix.startswith('.'):
+    #     suffix = '.' + suffix
+
+    for file in dir_path.iterdir():
+        if file.is_file() and file.name.endswith(suffix):
+            return str(file)
+
+    return None
+
+def find_first_executable_by_suffix(directory, suffix):
+    path = find_first_file_by_suffix(directory, suffix)
+    if path is None:
+        return None
+    if is_exe(path):
+        return path
+    return None

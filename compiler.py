@@ -4,6 +4,8 @@ import sys
 
 __author__ = 'trol'
 
+import utils
+
 
 class Compiler(object):
     project = None
@@ -17,6 +19,8 @@ class Compiler(object):
     def __init__(self, project):
         self.project = project
         self.configurations = set([])
+        self.config = utils.get_config()
+        self.includes = self.project.get('include')
 
     def init(self, builder_root):
         pass
@@ -57,6 +61,19 @@ class Compiler(object):
             print('Exit code is', rc)
             print(cmd)
             quit(-1)
+
+    def get_defines_args(self, key_str):
+        # key_str = '-D'
+        defs = self.project.get('defines')
+        result = ''
+        if defs is not None:
+            for d in defs:
+                result += key_str + d + ' '
+        defs_config = self.project.get('define')
+        if defs_config is not None:
+            for d in defs_config:
+                result += key_str + d + ' '
+        return result
 
     @staticmethod
     def error(msg):

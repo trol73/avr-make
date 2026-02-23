@@ -42,9 +42,8 @@ class GccCompiler(Compiler):
         s = self.cmd + ' -o ' + self.executable_file_name()
         for name in self.files_to_compile:
             s += ' ' + name
-        includes = self.project.get('include')
-        if includes is not None:
-            for p in includes:
+        if self.includes is not None:
+            for p in self.includes:
                 s += ' -I ' + p
 
         s += ' ' + self.get_options_args() + self.get_defines_args()

@@ -191,8 +191,9 @@ class AvrCompiler(Compiler):
         args = []
         arg_cpu = '-DF_CPU=' + str(self.project.get('frequency')) + ' -mmcu=' + self.project.get('mcu')
         args.append('-x c -c -std=gnu99')
+#        -mshort-calls -mrelax
         args.append(
-            '-funsigned-char -funsigned-bitfields -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -Wall')
+            '-funsigned-char -funsigned-bitfields -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mshort-calls -mrelax -Wall')
         args.append('-ffreestanding -mcall-prologues')
         if source_file_name.startswith('src/'):
             args.append('-iquote  "' + self.project.root_path + '/src"')
@@ -209,7 +210,7 @@ class AvrCompiler(Compiler):
         os.chdir(os.path.dirname(full_src))
         utils.remove_file_if_exist(full_out + '.o')
 
-        #print(cmd)
+#        print(cmd)
         self.execute(cmd)
 
         self.compiled_objects_path.append(full_out + '.o')
@@ -511,16 +512,3 @@ class AvrCompiler(Compiler):
 
     def get_elf_filepath(self):
         return self.get_out_filepath('.elf')
-
-    def get_defines_args(self, key_str):
-        # key_str = '-D'
-        defs = self.project.get('defines')
-        result = ''
-        if defs is not None:
-            for d in defs:
-                result += key_str + d + ' '
-        defs_config = self.project.get('define')
-        if defs_config is not None:
-            for d in defs_config:
-                result += key_str + d + ' '
-        return result
