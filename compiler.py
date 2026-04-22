@@ -43,6 +43,12 @@ class Compiler(object):
 
         if len(self.configurations) == 0:
             self.configurations.add(None)
+        for config in self.configurations:
+            self.project.set_current_configuration(config)
+            if config is not None:
+                print('--[' + config + ']--')
+            self.build()
+
 
     def build(self):
         sources = self.project.get_sources()

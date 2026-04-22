@@ -52,11 +52,11 @@ class RiscVCompiler(Compiler):
 
     def run(self, argv):
         super(RiscVCompiler, self).run(argv)
-        for config in self.configurations:
-            self.project.set_current_configuration(config)
-            if config is not None:
-                print('--[' + config + ']--')
-            self.build()
+        # for config in self.configurations:
+        #     self.project.set_current_configuration(config)
+        #     if config is not None:
+        #         print('--[' + config + ']--')
+        #     self.build()
 
         # print('run', argv)
         # for s in self.project.get_sources():

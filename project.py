@@ -65,7 +65,9 @@ class Project:
                 config = configurations[self.current_configuration]
                 if name in config.keys():
                     result = config[name]
-        if result is not None:  # and type(result) is not list:
+                    # print('FROM CONFIG ', name, result)
+        if result is not None and name != 'compiler_options':  # and type(result) is not list:
+            # print('SKIP MERGE ', name)
             return result
 
         if name in self._loc.keys():
@@ -81,6 +83,7 @@ class Project:
                         merged_list.append(a)
                     for a in general_result:
                         merged_list.append(a)
+                    # print('merged_list', merged_list)
                     return merged_list
             return general_result
         else:

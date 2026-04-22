@@ -119,11 +119,11 @@ class AvrCompiler(Compiler):
 
         if self.op_clean:
             self.clean()
-        for config in self.configurations:
-            self.project.set_current_configuration(config)
-            if config is not None:
-                print('--[' + config + ']--')
-            self.build()
+        # for config in self.configurations:
+        #     self.project.set_current_configuration(config)
+        #     if config is not None:
+        #         print('--[' + config + ']--')
+        #     self.build()
         if self.op_upload:
             self.upload_firmware()
 

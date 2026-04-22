@@ -41,29 +41,29 @@ target_platform = prj.get('platform')
 
 if compiler_name is None or compiler_name == 'avr':
     compiler = AvrCompiler(prj)
-elif compiler_name == 'gcc':
+elif compiler_name == 'gcc' or compiler_name == 'g++':
     compiler = GccCompiler(prj)
-    compiler.cmd = 'gcc'
+    # compiler.cmd = 'gcc'
     compiler.platform = target_platform
-elif compiler_name == 'gcc-w64':
-    compiler = GccCompiler(prj)
-    compiler.cmd = 'x86_64-w64-mingw32-gcc'
-    compiler.platform = 'win-x64'
-elif compiler_name == 'gcc-i686':
-    compiler = GccCompiler(prj)
-    compiler.cmd = 'i686-w64-mingw32-gcc'
-    compiler.platform = 'win-i686'
-elif compiler_name == 'g++':
-    compiler = GccCompiler(prj)
-    compiler.cmd = 'g++'
-elif compiler_name == 'g++-w64':
-    compiler = GccCompiler(prj)
-    compiler.cmd = 'x86_64-w64-mingw32-g++'
-    compiler.platform = 'win-x64'
-elif compiler_name == 'g++-i686':
-    compiler = GccCompiler(prj)
-    compiler.cmd = 'i686-w64-mingw32-g++'
-    compiler.platform = 'win-i686'
+# elif compiler_name == 'gcc-w64':
+#     compiler = GccCompiler(prj)
+#     compiler.cmd = 'x86_64-w64-mingw32-gcc'
+#     compiler.platform = 'win-x64'
+# elif compiler_name == 'gcc-i686':
+#     compiler = GccCompiler(prj)
+#     compiler.cmd = 'i686-w64-mingw32-gcc'
+#     compiler.platform = 'win-i686'
+# elif compiler_name == 'g++':
+#     compiler = GccCompiler(prj)
+#     compiler.cmd = 'g++'
+# elif compiler_name == 'g++-w64':
+#     compiler = GccCompiler(prj)
+#     compiler.cmd = 'x86_64-w64-mingw32-g++'
+#     compiler.platform = 'win-x64'
+# elif compiler_name == 'g++-i686':
+#     compiler = GccCompiler(prj)
+#     compiler.cmd = 'i686-w64-mingw32-g++'
+#     compiler.platform = 'win-i686'
 elif compiler_name == 'risc-v':
     compiler = RiscVCompiler(prj)
 else:

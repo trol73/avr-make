@@ -4,6 +4,7 @@ import os
 import shutil
 import platform
 
+import project
 from compiler import Compiler
 import utils
 
@@ -22,20 +23,24 @@ class GccCompiler(Compiler):
 
     def run(self, argv):
         super(GccCompiler, self).run(argv)
-
         if self.op_clean:
             self.clean()
-        for config in self.configurations:
-            self.project.set_current_configuration(config)
-            if config is not None:
-                print('--[' + config + ']--')
-            self.build()
+        # for config in self.configurations:
+        #     self.project.set_current_configuration(config)
+        #     if config is not None:
+        #         print('--[' + config + ']--')
+        #     self.build()
         if self.op_run:
             self.execute('./' + self.executable_file_name())
 
     def build(self):
+        prj_platform = self.project.get('platform')
+        if prj_platform is not None:
+            self.platform = prj_platform
         if self.platform is None:
             self.platform = self.determine_platform()
+        self.cmd = self.get_compiler_for_platform()
+
         Compiler.build(self)
         modules_param = self.prepare_modules()
         # s = 'gcc -o ' + self.executable_file_name()
@@ -166,6 +171,32 @@ class GccCompiler(Compiler):
             osn = 'linux'
         else:
             osn = ''
-        print(osn + '-' + platform.machine())
+        # print('Home platform:', osn + '-' + platform.machine())
         return osn + '-' + platform.machine()
+
+
+    def get_compiler_for_platform(self):
+        my_platform = self.determine_platform()
+        compiler_name = self.project.get('compiler')
+
+        if compiler_name.startswith('gcc'):
+            if self.platform == 'win-x64':
+                return 'x86_64-w64-mingw32-gcc'
+            elif self.platform == 'win-i686':
+                return 'i686-w64-mingw32-gcc'
+            elif self.platform == 'linux-x86_64' and my_platform.startswith('macos'):
+                return 'x86_64-linux-musl-gcc'
+            else:
+                return 'gcc'
+        elif compiler_name.startswith('g++'):
+            if self.platform == 'win-x64':
+                return 'x86_64-w64-mingw32-g++'
+            elif self.platform == 'win-i686':
+                return 'i686-w64-mingw32-g++'
+            elif self.platform == 'linux-x86_64' and my_platform.startswith('macos'):
+                return 'x86_64-linux-musl-g++'
+            else:
+                return 'g++'
+        else:
+            return None
 
