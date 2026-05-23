@@ -52,6 +52,7 @@ class Compiler(object):
 
     def build(self):
         sources = self.project.get_sources()
+        sources = sorted(sources)
         for src in sources:
             ext = os.path.splitext(src)[1][1:]
             self.compile(src, ext)
