@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 
 import utils
 from compiler import Compiler
@@ -146,6 +147,7 @@ class AvrCompiler(Compiler):
         self.make_hex(self.project)
         self.make_eep()
         self.make_lst()
+        self.check_linker_map()
         self.show_size()
 
     def compile(self, source_file_name, ext):
@@ -507,8 +509,17 @@ class AvrCompiler(Compiler):
         cmd = self.string(self.path_avr_size, '--format=avr --mcu=' + self.project.get('mcu'), self.get_elf_filepath())
         self.execute(cmd)
 
+    def check_linker_map(self):
+        rules_file = self.project.root_path + '/linker-rules'
+        if os.path.exists(rules_file):
+            if os.system('linker-map-checker ' + ' ' + rules_file + ' ' + self.get_map_filepath()) != 0:
+                sys.exit(100)
+
     def get_out_filepath(self, ext):
         return self.path_build + '/' + self.project.get_name() + ext
 
     def get_elf_filepath(self):
         return self.get_out_filepath('.elf')
+
+    def get_map_filepath(self):
+        return self.get_out_filepath('.map')
